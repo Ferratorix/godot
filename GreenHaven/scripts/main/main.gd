@@ -5,6 +5,7 @@ extends Node
 @onready var world: FarmWorld = $FarmWorld
 @onready var hud: Hud = $UI/Hud
 @onready var sound: SoundPlayer = $Sound
+@onready var menu: MainMenu = $MenuLayer/MainMenu
 
 
 func _ready() -> void:
@@ -18,6 +19,9 @@ func _ready() -> void:
 	hud.deselect_requested.connect(_on_deselect_requested)
 	hud.move_requested.connect(_on_move_requested)
 	hud.move_cancel_requested.connect(_on_move_cancel_requested)
+	hud.menu_requested.connect(menu.show_menu)
+	menu.play_requested.connect(func() -> void: hud.show_toast(tr("UI_WELCOME")))
+	GameManager.back_requested.connect(_on_back)
 	# Audio feedback for world/UI events (gameplay never calls audio directly).
 	world.room.drag_started.connect(func(_o: WorldObject) -> void: sound.play(&"pickup"))
 	world.room.drag_finished.connect(func(_o: WorldObject, _m: bool) -> void: sound.play(&"place"))
@@ -51,3 +55,17 @@ func _on_move_requested(obj: WorldObject) -> void:
 
 func _on_move_cancel_requested() -> void:
 	world.cancel_move_mode()
+
+
+## Android Back / Esc: the menu (if shown) or the HUD decides what closes.
+func _on_back() -> void:
+	if menu.visible:
+		menu.handle_back()
+	else:
+		hud.handle_back()
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		_on_back()
+		get_viewport().set_input_as_handled()

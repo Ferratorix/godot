@@ -635,3 +635,15 @@ msgstr "Собрано видов урожая: %d"
 
 msgid "DEV_DONE_SKIPPED_FMT"
 msgstr "Время сдвинуто на %s"
+
+msgid "UI_PLAY"
+msgstr "Играть"
+
+msgid "UI_QUIT"
+msgstr "Выход"
+
+msgid "UI_MENU_SUBTITLE"
+msgstr "Уютная ферма"
+
+msgid "UI_WELCOME"
+msgstr "Добро пожаловать на ферму!"

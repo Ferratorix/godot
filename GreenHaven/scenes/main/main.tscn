@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/main/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/farm/farm_world.tscn" id="2_world"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
 [ext_resource type="Script" path="res://scripts/audio/sound_player.gd" id="4_sound"]
+[ext_resource type="PackedScene" path="res://scenes/ui/main_menu.tscn" id="5_menu"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_main")
@@ -17,3 +18,8 @@ layer = 10
 
 [node name="Sound" type="Node" parent="."]
 script = ExtResource("4_sound")
+
+[node name="MenuLayer" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="MainMenu" parent="MenuLayer" instance=ExtResource("5_menu")]

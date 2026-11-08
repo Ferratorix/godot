@@ -233,3 +233,28 @@ func test_lab_through_ui() -> void:
 	check(not DevLab.is_active())
 	check_eq(main.world.room.layout.id, &"home_garden_room", "back home")
 	check(_button(hud, "UI_DEV_PANEL") == null, "DEV button hidden at home")
+
+
+func test_main_menu_flow() -> void:
+	var menu: MainMenu = main.menu
+	check(menu.visible, "menu shown on start")
+	(menu.get_node("%SettingsButton") as Button).pressed.emit()
+	check(menu.modal.visible, "settings over the menu")
+	check(_button(menu, "UI_ENTER_LAB") == null, "no lab entry from the menu")
+	main._on_back()
+	check(not menu.modal.visible, "back closes menu settings")
+	(menu.get_node("%PlayButton") as Button).pressed.emit()
+	await tree.create_timer(0.4).timeout
+	check(not menu.visible, "play hides the menu")
+	main._on_back()  # Nothing open in game -> back to the menu.
+	check(menu.visible, "back returns to the menu")
+
+
+func test_main_theme_loops() -> void:
+	var music: AudioStreamPlayer = null
+	for c in main.sound.get_children():
+		if c is AudioStreamPlayer and c.stream is AudioStreamMP3:
+			music = c
+	check(music != null, "main theme loaded")
+	check((music.stream as AudioStreamMP3).loop, "loops")
+	check(music.stream.get_length() > 100.0, "full 2-minute track")

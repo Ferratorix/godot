@@ -635,3 +635,15 @@ msgstr "Harvested product types: %d"
 
 msgid "DEV_DONE_SKIPPED_FMT"
 msgstr "Time skipped by %s"
+
+msgid "UI_PLAY"
+msgstr "Play"
+
+msgid "UI_QUIT"
+msgstr "Quit"
+
+msgid "UI_MENU_SUBTITLE"
+msgstr "A cozy farm"
+
+msgid "UI_WELCOME"
+msgstr "Welcome to the farm!"

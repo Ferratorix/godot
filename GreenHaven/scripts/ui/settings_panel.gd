@@ -9,6 +9,8 @@ const RESET_CONFIRM_SEC: float = 3.0
 
 var _reset_armed_until: float = 0.0
 var _version_taps: int = 0
+## The main menu hides the lab entry (the lab needs the game view).
+var allow_lab: bool = true
 
 
 func _init() -> void:
@@ -47,7 +49,7 @@ func refresh() -> void:
 	var reset := UiKit.button(reset_text, _on_reset_pressed, 180)
 	_style_as_warning(reset)
 	content.add_child(reset)
-	if GameSettings.is_dev_available() and not DevLab.is_active():
+	if allow_lab and GameSettings.is_dev_available() and not DevLab.is_active():
 		content.add_child(UiKit.separator())
 		content.add_child(UiKit.button("UI_ENTER_LAB", _enter_lab, 180))
 	content.add_child(UiKit.label("UI_SETTINGS_SAVED_NOTE", 9, UiKit.MUTED_COLOR, true))

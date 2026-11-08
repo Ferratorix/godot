@@ -17,6 +17,8 @@ signal toast_shown(is_error: bool)
 signal panel_opened
 ## A guided goal was completed.
 signal goal_completed(goal: GoalData)
+## Back pressed with nothing to close: show the main menu.
+signal menu_requested
 
 const CATEGORY_KEYS := {
 	PlaceableData.Category.FURNITURE: "CATEGORY_FURNITURE",
@@ -81,7 +83,6 @@ func _ready() -> void:
 	%Dim.gui_input.connect(_on_dim_input)
 	_create_panels()
 
-	GameManager.back_requested.connect(handle_back)
 	GameManager.farm_replaced.connect(_bind_farm)
 	GameManager.welcome_back.connect(_on_welcome_back)
 	GameManager.goals_replaced.connect(_bind_goals)
@@ -454,7 +455,8 @@ func is_panel_open() -> bool:
 	return _shown_object != null
 
 
-## Android Back / Esc: close the top-most UI element, otherwise quit.
+## Android Back / Esc (routed by Main): close the top-most UI element;
+## with nothing open, ask for the main menu.
 func handle_back() -> void:
 	if _open_panel:
 		close_panel()
@@ -463,18 +465,12 @@ func handle_back() -> void:
 	elif _shown_object:
 		deselect_requested.emit()
 	else:
-		GameManager.request_quit()
+		menu_requested.emit()
 
 
 func _on_move_pressed() -> void:
 	if _shown_object:
 		move_requested.emit(_shown_object)
-
-
-func _unhandled_key_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel"):
-		handle_back()
-		get_viewport().set_input_as_handled()
 
 
 ## Fade + slight pop. Animates only modulate/scale: changing position of an

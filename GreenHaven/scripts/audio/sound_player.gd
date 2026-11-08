@@ -18,7 +18,8 @@ const SOUNDS := {
 	&"place": preload("res://assets/placeholder/audio/sfx_place.wav"),
 	&"panel": preload("res://assets/placeholder/audio/sfx_panel.wav"),
 }
-const MUSIC: AudioStreamWAV = preload("res://assets/placeholder/audio/music_home_garden.wav")
+## Main theme "Morning Garden" (final asset, provided by the author).
+const MUSIC: AudioStreamMP3 = preload("res://assets/audio/music_main_theme.mp3")
 const VOICES: int = 6
 ## The same sound is not restarted more often than this (harvest-all spam).
 const MIN_REPEAT_SEC: float = 0.07
@@ -72,10 +73,8 @@ func play(sound: StringName, pitch_variation: float = 0.06) -> void:
 
 
 func _start_music() -> void:
-	var stream: AudioStreamWAV = MUSIC.duplicate()
-	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	stream.loop_begin = 0
-	stream.loop_end = int(stream.get_length() * stream.mix_rate)
+	var stream: AudioStreamMP3 = MUSIC.duplicate()
+	stream.loop = true
 	_music = AudioStreamPlayer.new()
 	_music.stream = stream
 	_music.bus = GameSettings.BUS_MUSIC

@@ -214,7 +214,8 @@ def main() -> None:
     }
     for name, fn in effects.items():
         save(name, fn())
-    save("music_home_garden", music_loop(), peak=0.45)
+    # The placeholder music is no longer used (final theme in assets/audio/);
+    # call music_loop() manually if a quick test loop is ever needed.
 
 
 if __name__ == "__main__":

@@ -16,6 +16,8 @@ func run(tree: SceneTree, args: Dictionary) -> void:
 	tree.root.add_child(main)
 	for i in 5:
 		await tree.process_frame
+	if not args.has("menu"):
+		main.menu.visible = false
 	var world: FarmWorld = main.world
 	if args.has("zoom"):
 		world.camera.zoom_at(tree.root.get_visible_rect().size * 0.5, float(args.zoom))
