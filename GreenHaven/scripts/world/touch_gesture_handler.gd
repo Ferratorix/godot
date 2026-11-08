@@ -13,7 +13,7 @@ extends Node
 ## * long press — hold still; the listener may call [method begin_object_drag]
 ##   to turn the rest of the gesture into an object drag;
 ## * one-finger drag — pan (with release velocity for inertia);
-## * two-finger pinch — zoom around the fingers' centre (+ pan);
+## * two-finger pinch — zoom around the fingers' center (+ pan);
 ## * mouse: left = same as one finger, right/middle drag = pan, wheel = zoom.
 
 signal tapped(position: Vector2)

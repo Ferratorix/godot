@@ -4,7 +4,7 @@ extends Node2D
 ##
 ## Pure view: it does not own occupancy (PlacementGrid does) or gameplay
 ## state (future farming/equipment systems). Its node position is the
-## footprint centre, which makes Y-sorting by position correct.
+## footprint center, which makes Y-sorting by position correct.
 
 const SELECT_TINT := Color(1.12, 1.12, 1.0)
 const VALID_TINT := Color(0.75, 1.15, 0.75, 0.85)
@@ -181,7 +181,7 @@ func set_drag_preview(active: bool, valid: bool = true) -> void:
 		z_index = 0
 		return
 	sprite.modulate = VALID_TINT if valid else INVALID_TINT
-	z_index = 1  # Float above neighbours while carried.
+	z_index = 1  # Float above neighbors while carried.
 
 
 func play_place_animation() -> void:

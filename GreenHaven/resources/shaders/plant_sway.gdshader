@@ -1,5 +1,5 @@
 // Gentle sway for plant sprites: the top of the sprite moves, the soil line
-// stays put. Phase comes from the world position so neighbours don't move in
+// stays put. Phase comes from the world position so neighbors don't move in
 // sync. Pixel snapping keeps the motion pixel-art friendly (1 px steps).
 shader_type canvas_item;
 

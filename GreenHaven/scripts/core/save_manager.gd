@@ -190,7 +190,7 @@ func read_save_file(file_path: String) -> Dictionary:
 
 
 ## Structural validation (types of top-level sections). Values are
-## sanitised by each system's apply_state().
+## sanitized by each system's apply_state().
 func validate_payload(p: Dictionary) -> bool:
 	for section in ["time", "progression", "inventory", "economy", "farm", "goals"]:
 		if not p.get(section) is Dictionary:

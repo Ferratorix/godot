@@ -2,7 +2,7 @@
 """Generates PLACEHOLDER sound effects and a background music loop.
 
 Output: assets/placeholder/audio/*.wav (16-bit mono, 22050 Hz).
-Synthesised from simple oscillators so the project has a coherent, soft
+Synthesized from simple oscillators so the project has a coherent, soft
 "cozy" sound palette until real audio is commissioned (see docs/ASSET_GUIDE.md).
 
 Usage (from GreenHaven/):  python3 tools/generate_placeholder_audio.py
@@ -33,8 +33,14 @@ def env(n: int, attack: float = 0.005, release: float = 0.1) -> np.ndarray:
     return a * np.exp(-t / max(release, 1e-4))
 
 
-def tone(freq: float, seconds: float, wave_kind: str = "sine", release: float = 0.15,
-         attack: float = 0.004, vibrato: float = 0.0) -> np.ndarray:
+def tone(
+    freq: float,
+    seconds: float,
+    wave_kind: str = "sine",
+    release: float = 0.15,
+    attack: float = 0.004,
+    vibrato: float = 0.0,
+) -> np.ndarray:
     t = t_axis(seconds)
     f = freq * (1.0 + vibrato * np.sin(2 * np.pi * 5.0 * t))
     phase = 2 * np.pi * np.cumsum(f) / SR
@@ -173,8 +179,7 @@ def music_loop() -> np.ndarray:
     length = bars * 4 * beat
     n = int(SR * length)
     buf = np.zeros(n + SR * 3)
-    chords = [["C3", "E4", "G4", "C5"], ["A2", "E4", "A4", "C5"],
-              ["F2", "F4", "A4", "C5"], ["G2", "D4", "G4", "B4"]]
+    chords = [["C3", "E4", "G4", "C5"], ["A2", "E4", "A4", "C5"], ["F2", "F4", "A4", "C5"], ["G2", "D4", "G4", "B4"]]
     for bar in range(bars):
         chord = chords[bar % 4]
         t0 = bar * 4 * beat
@@ -196,9 +201,15 @@ def music_loop() -> np.ndarray:
 
 def main() -> None:
     effects = {
-        "sfx_click": sfx_click, "sfx_plant": sfx_plant, "sfx_harvest": sfx_harvest,
-        "sfx_coins": sfx_coins, "sfx_buy": sfx_buy, "sfx_level_up": sfx_level_up,
-        "sfx_error": sfx_error, "sfx_pickup": sfx_pickup, "sfx_place": sfx_place,
+        "sfx_click": sfx_click,
+        "sfx_plant": sfx_plant,
+        "sfx_harvest": sfx_harvest,
+        "sfx_coins": sfx_coins,
+        "sfx_buy": sfx_buy,
+        "sfx_level_up": sfx_level_up,
+        "sfx_error": sfx_error,
+        "sfx_pickup": sfx_pickup,
+        "sfx_place": sfx_place,
         "sfx_panel": sfx_panel,
     }
     for name, fn in effects.items():

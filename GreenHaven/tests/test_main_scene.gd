@@ -37,7 +37,7 @@ func test_scene_starts_with_room_in_view() -> void:
 	check(world.camera.is_current(), "camera active")
 	var vp_rect := main.get_viewport().get_visible_rect()
 	check(vp_rect.has_point(_world_to_screen(world.room.get_world_rect().get_center())),
-		"room centre on screen")
+		"room center on screen")
 
 
 func _find(id: StringName) -> WorldObject:

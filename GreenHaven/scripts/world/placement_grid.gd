@@ -3,7 +3,7 @@ extends RefCounted
 ## Pure-logic occupancy map of a rectangular cell area.
 ##
 ## Knows nothing about rendering: stores which object (by instance key)
-## occupies which cells, validates placement and serialises to plain data
+## occupies which cells, validates placement and serializes to plain data
 ## for the SaveManager. Keys are StringName instance ids, e.g. &"rack_1".
 
 var size: Vector2i

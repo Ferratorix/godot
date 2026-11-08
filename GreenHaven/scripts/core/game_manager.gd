@@ -8,7 +8,7 @@ extends Node
 
 ## App went to background (Android "home" button, screen off, focus lost).
 signal app_paused
-## App returned to foreground. [param seconds_away] is sanitised real time.
+## App returned to foreground. [param seconds_away] is sanitized real time.
 signal app_resumed(seconds_away: float)
 ## The game is about to quit: last chance to save.
 signal quit_requested

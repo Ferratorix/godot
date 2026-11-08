@@ -1,5 +1,5 @@
 extends GHTestCase
-## PlacementGrid: occupancy rules and serialisation.
+## PlacementGrid: occupancy rules and serialization.
 
 
 func test_place_and_occupancy() -> void:

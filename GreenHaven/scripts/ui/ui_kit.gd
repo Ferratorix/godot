@@ -1,7 +1,7 @@
 class_name UiKit
 extends RefCounted
 ## Small builders for code-constructed UI, so all panels share one look.
-## Colours/fonts come from scenes/ui/green_haven_theme.tres.
+## Colors/fonts come from scenes/ui/green_haven_theme.tres.
 
 const COIN_ICON: Texture2D = preload("res://assets/placeholder/ui/icon_coin.png")
 const TITLE_COLOR := Color(0.29, 0.45, 0.24)

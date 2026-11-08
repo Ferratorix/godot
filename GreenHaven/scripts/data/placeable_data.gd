@@ -15,7 +15,7 @@ enum Category { FURNITURE, DECOR, PRODUCTION, STORAGE, TRADE, EQUIPMENT }
 @export var description_key: String = ""
 @export var category: Category = Category.FURNITURE
 @export var texture: Texture2D
-## Pixel inside [member texture] that sits on the footprint centre.
+## Pixel inside [member texture] that sits on the footprint center.
 ## Convention for 1x1 objects: (width / 2, height - 8).
 @export var texture_anchor: Vector2 = Vector2(16, 40)
 ## Footprint in grid cells. v0.1 objects are 1x1; the grid supports more.
@@ -28,7 +28,7 @@ enum Category { FURNITURE, DECOR, PRODUCTION, STORAGE, TRADE, EQUIPMENT }
 @export var grow_slots: int = 0
 ## What kind of growing medium the slots provide (see PlantData.SlotType).
 @export var slot_type: int = 0
-## Per-slot point (relative to the footprint centre) where the plant's
+## Per-slot point (relative to the footprint center) where the plant's
 ## soil line is drawn. Size must equal [member grow_slots].
 @export var slot_positions: PackedVector2Array = PackedVector2Array()
 

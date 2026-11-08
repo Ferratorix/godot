@@ -291,7 +291,7 @@ func purchase_equipment(id: StringName) -> bool:
 	return true
 
 
-# --- Serialisation -------------------------------------------------------
+# --- Serialization -------------------------------------------------------
 
 func to_dict() -> Dictionary:
 	var slot_data := {}

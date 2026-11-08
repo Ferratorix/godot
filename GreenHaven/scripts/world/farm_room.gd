@@ -272,8 +272,8 @@ func _build_floor() -> void:
 
 
 ## Walls stand on the back edges of the room: every cell whose top-left or
-## top-right neighbour is outside the room gets a wall slice on that edge.
-## Layout-agnostic: relies only on TileMapLayer neighbour queries.
+## top-right neighbor is outside the room gets a wall slice on that edge.
+## Layout-agnostic: relies only on TileMapLayer neighbor queries.
 func _build_walls() -> void:
 	var half := get_tile_size() * 0.5
 	for x in layout.size.x:

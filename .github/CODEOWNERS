@@ -297,3 +297,7 @@
 *.py                                          @godotengine/buildsystem
 SConstruct                                    @godotengine/buildsystem
 SCsub                                         @godotengine/buildsystem
+
+# Green Haven (game project built on this engine)
+
+/GreenHaven/                                  @Ferratorix

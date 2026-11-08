@@ -6,7 +6,7 @@ extends Camera2D
 ## controller, so it does not depend on any input source.
 ## * Smooth motion: position/zoom ease towards targets.
 ## * Inertia: a fling keeps the camera gliding with damping.
-## * Bounds: the view centre is clamped to [member world_bounds].
+## * Bounds: the view center is clamped to [member world_bounds].
 ## * Pixel-perfect: when a zoom gesture settles, zoom snaps to a level where
 ##   one art pixel maps to a whole number of screen pixels (no blurry or
 ##   uneven pixels).
@@ -23,7 +23,7 @@ signal zoom_settled(zoom_level: float)
 @export var zoom_settle_delay: float = 0.18
 @export var pixel_perfect_zoom: bool = true
 
-## World-space rectangle the view centre must stay inside.
+## World-space rectangle the view center must stay inside.
 var world_bounds: Rect2 = Rect2(-512, -512, 1024, 1024)
 var target_position: Vector2
 var target_zoom: float = 1.0

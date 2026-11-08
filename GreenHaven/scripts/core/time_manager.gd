@@ -3,7 +3,7 @@ extends Node
 ##
 ## Responsibilities:
 ## * Wraps a swappable TimeSource (system clock by default).
-## * Sanitises time: rejects invalid timestamps and detects the device clock
+## * Sanitizes time: rejects invalid timestamps and detects the device clock
 ##   being moved backwards (rollback). During a rollback the game keeps using
 ##   the last trusted time, so timers never run "in reverse" and the player
 ##   cannot farm by toggling the clock.
@@ -39,7 +39,7 @@ func _ready() -> void:
 	_tick_timer.timeout.connect(_on_tick)
 	add_child(_tick_timer)
 	_tick_timer.start()
-	now()  # Initialise the trusted time.
+	now()  # Initialize the trusted time.
 
 
 ## Replaces the time source (tests, debug, future server time).
@@ -56,7 +56,7 @@ func get_time_source() -> TimeSource:
 	return _source
 
 
-## Current sanitised Unix time in seconds. Never decreases during a session.
+## Current sanitized Unix time in seconds. Never decreases during a session.
 func now() -> float:
 	var raw: float = _source.get_unix_time()
 	if not is_valid_timestamp(raw):

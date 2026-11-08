@@ -2,6 +2,18 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — SemVer.
 
+## [0.3.1] — 2026-11-08 — PHASE 8 (подготовка релиза)
+
+### Добавлено
+- `.github/workflows/green_haven.yml`: тесты на Godot 4.5.1 stable и экспорт Android APK.
+- Адаптивная иконка (передний план + фон 432×432).
+- `tools/benchmark.gd` (режимы `max` и `stress`), `docs/RELEASE.md`, `docs/PRIVACY_POLICY.md`.
+- `/GreenHaven/` в `.github/CODEOWNERS`.
+
+### Изменено
+- Код и Python-инструменты приведены к статическим проверкам репозитория
+  (codespell, ruff, mypy, исполняемые скрипты) — CI движка больше не падает на файлах игры.
+
 ## [0.3.0] — 2026-11-08 — PHASE 7 (полировка)
 
 ### Добавлено

@@ -1,5 +1,5 @@
 extends GHTestCase
-## TimeManager: sanitised real time, rollback protection, clamping.
+## TimeManager: sanitized real time, rollback protection, clamping.
 
 const T0: float = 1800000000.0  # 2027-01-15
 

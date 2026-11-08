@@ -12,7 +12,7 @@ produces byte-identical images unless this script changes.
 
 Geometry conventions (must match the Godot TileSet):
     * Isometric tile: 32x16 px diamond, 2:1 pixel lines.
-    * Object sprites: the footprint diamond centre is at (W/2, H-8).
+    * Object sprites: the footprint diamond center is at (W/2, H-8).
     * Wall segments: 16 px wide, WALL_HEIGHT px tall walls + 8 px slope.
 """
 
@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import os
 import random
-from typing import Iterable
+from typing import Callable, Iterable
 
 from PIL import Image, ImageDraw
 
@@ -82,9 +82,10 @@ def diamond_points(cx: float, cy: float, hw: float, hh: float) -> list[tuple[flo
     return [(cx, cy - hh), (cx + hw, cy), (cx, cy + hh), (cx - hw, cy)]
 
 
-def iso_box(img: Image.Image, cx: int, base_y: int, hw: int, hh: int, height: int,
-            top, left, right, outline=OUTLINE) -> None:
-    """Draws an isometric box whose footprint diamond centre is (cx, base_y)."""
+def iso_box(
+    img: Image.Image, cx: int, base_y: int, hw: int, hh: int, height: int, top, left, right, outline=OUTLINE
+) -> None:
+    """Draws an isometric box whose footprint diamond center is (cx, base_y)."""
     d = ImageDraw.Draw(img)
     ty = base_y - height
     # Left face: left vertex -> bottom vertex, extruded upwards.
@@ -93,13 +94,12 @@ def iso_box(img: Image.Image, cx: int, base_y: int, hw: int, hh: int, height: in
     d.polygon([(cx, ty + hh), (cx + hw, ty), (cx + hw, base_y), (cx, base_y + hh)], fill=right)
     d.polygon(diamond_points(cx, ty, hw, hh), fill=top)
     if outline is not None:
-        d.line([(cx - hw, ty), (cx - hw, base_y), (cx, base_y + hh), (cx + hw, base_y), (cx + hw, ty)],
-               fill=outline)
+        d.line([(cx - hw, ty), (cx - hw, base_y), (cx, base_y + hh), (cx + hw, base_y), (cx + hw, ty)], fill=outline)
         d.line(diamond_points(cx, ty, hw, hh) + [(cx, ty - hh)], fill=outline)
         d.line([(cx, ty + hh), (cx, base_y + hh)], fill=outline)
 
 
-def blob(img: Image.Image, cx: int, cy: int, r: int, colors: Iterable) -> None:
+def blob(img: Image.Image, cx: int, cy: int, r: int, colors: Iterable[tuple[int, int, int, int]]) -> None:
     """Small pixel 'leaf cluster': shaded disc with a highlight."""
     dark, mid, hi = colors
     d = ImageDraw.Draw(img)
@@ -125,8 +125,8 @@ def floor_tile(kind: str) -> Image.Image:
                 continue
             if kind == "rug":
                 # Checker-ish woven rug with a cream border band.
-                u = (x / 2 + y)  # axis along one iso direction
-                v = (x / 2 - y)
+                u = x / 2 + y  # axis along one iso direction
+                v = x / 2 - y
                 c = RUG if (int(u // 4) + int(v // 4)) % 2 == 0 else RUG_DARK
                 px[x, y] = c
             else:
@@ -181,12 +181,15 @@ def wall_segment(side: str) -> Image.Image:
             else:
                 c = WALL_GREEN if (i % 6) < 4 else WALL_GREEN_DARK  # stripes
             if shade and c[3]:
-                c = tuple(max(0, int(ch * 0.88)) for ch in c[:3]) + (255,)
+                c = (int(c[0] * 0.88), int(c[1] * 0.88), int(c[2] * 0.88), 255)
             px[i, y] = c
     return img
 
 
-def sheared_rect(w: int, h: int, side: str) -> tuple[Image.Image, callable]:
+Color = tuple[int, int, int, int]
+
+
+def sheared_rect(w: int, h: int, side: str) -> tuple[Image.Image, Callable[[int, int, Color], None]]:
     """Returns an image tall enough for a w x h rect sheared along a wall."""
     extra = w // 2
     img = new_image(w, h + extra)
@@ -399,7 +402,7 @@ def plant_stage(crop: str, stage: int) -> Image.Image:
     elif style in ("rosette", "broad", "lobed"):
         r = 1 + grow
         rows = [(cx - r, base - r // 2), (cx + r, base - r // 2), (cx, base - r)]
-        for (x, y) in rows:
+        for x, y in rows:
             _leaf(d, x, y, max(1, r - (1 if style == "lobed" else 0)), max(1, r - 1), mid, hi)
         _leaf(d, cx, base - r - 1, max(1, r - 1), max(1, r - 1), dark if style == "broad" else mid, hi)
         if style == "lobed":
@@ -490,9 +493,15 @@ def equipment_icon(kind: str) -> Image.Image:
             d.point((13, 2), fill=COIN)
             d.point((12, 1), fill=COIN)
     else:
-        src = {"water_tank": water_tank, "nutrient_system": nutrient_system, "ph_control": ph_control,
-               "auto_watering": auto_watering, "hydro_rack_basic": hydro_rack,
-               "hydro_rack_advanced": lambda: hydro_rack(True)}[kind]()
+        makers: dict[str, Callable[[], Image.Image]] = {
+            "water_tank": water_tank,
+            "nutrient_system": nutrient_system,
+            "ph_control": ph_control,
+            "auto_watering": auto_watering,
+            "hydro_rack_basic": hydro_rack,
+            "hydro_rack_advanced": lambda: hydro_rack(True),
+        }
+        src = makers[kind]()
         bbox = src.getbbox()
         src = src.crop(bbox)
         scale = min(16 / src.width, 16 / src.height)
@@ -591,8 +600,7 @@ def shipping_box() -> Image.Image:
     d.line([(cx, by), (cx + 13, by - 6)], fill=LEAF_DARK)
     d.ellipse([cx + 5, by - 7, cx + 9, by - 3], fill=COIN, outline=OUTLINE)
     # Open lid leaning backwards.
-    d.polygon([(cx - 13, by - 12), (cx, by - 18), (cx, by - 24), (cx - 13, by - 18)], fill=WOOD_HI,
-              outline=OUTLINE)
+    d.polygon([(cx - 13, by - 12), (cx, by - 18), (cx, by - 24), (cx - 13, by - 18)], fill=WOOD_HI, outline=OUTLINE)
     return img
 
 
@@ -657,6 +665,28 @@ def app_icon() -> Image.Image:
     return img.resize((128, 128), Image.NEAREST)
 
 
+def adaptive_icon_layers() -> tuple[Image.Image, Image.Image]:
+    """Android adaptive icon (432x432): foreground sprout inside the 66% safe
+    zone, background in wall green with a wood floor band."""
+    fg_small = new_image(32, 32)
+    d = ImageDraw.Draw(fg_small)
+    d.rectangle([9, 19, 22, 27], fill=TERRACOTTA, outline=OUTLINE)
+    d.rectangle([8, 17, 23, 19], fill=TERRACOTTA_DARK, outline=OUTLINE)
+    d.line([(15, 17), (15, 10)], fill=LEAF_DEEP)
+    d.ellipse([7, 7, 15, 13], fill=LEAF, outline=LEAF_DEEP)
+    d.ellipse([15, 4, 24, 11], fill=LEAF_HI, outline=LEAF_DEEP)
+    fg = new_image(432, 432)
+    sprout = fg_small.resize((256, 256), Image.NEAREST)
+    fg.alpha_composite(sprout, (88, 76))
+    bg = Image.new("RGBA", (432, 432), WALL_GREEN)
+    bd = ImageDraw.Draw(bg)
+    for x in range(0, 432, 48):
+        bd.rectangle([x, 0, x + 31, 431], fill=WALL_GREEN_DARK)
+    bd.rectangle([0, 300, 431, 431], fill=WOOD_MID)
+    bd.rectangle([0, 300, 431, 307], fill=WOOD_DEEP)
+    return fg, bg
+
+
 def main() -> None:
     build_floor_atlas()
     save(wall_segment("left"), "environment/wall_left.png")
@@ -673,8 +703,16 @@ def main() -> None:
         save(plant_strip(crop), f"plants/{crop}_stages.png")
         save(product_icon(crop), f"icons/product_{crop}.png")
         save(seed_icon(crop), f"icons/seed_{crop}.png")
-    for kind in ("hydro_rack_basic", "hydro_rack_advanced", "led_basic", "led_advanced",
-                 "auto_watering", "water_tank", "ph_control", "nutrient_system"):
+    for kind in (
+        "hydro_rack_basic",
+        "hydro_rack_advanced",
+        "led_basic",
+        "led_advanced",
+        "auto_watering",
+        "water_tank",
+        "ph_control",
+        "nutrient_system",
+    ):
         save(equipment_icon(kind), f"icons/equipment_{kind}.png")
     for kind in ("coin", "star", "shop", "storage", "skills", "ready", "settings"):
         save(ui_small_icon(kind), f"ui/icon_{kind}.png")
@@ -686,6 +724,9 @@ def main() -> None:
     for st in ("normal", "hover", "pressed", "disabled"):
         save(ui_button(st), f"ui/button_{st}.png")
     save(ui_icon_recenter(), "ui/icon_recenter.png")
+    fg, bg = adaptive_icon_layers()
+    save(fg, "ui/icon_adaptive_foreground.png")
+    save(bg, "ui/icon_adaptive_background.png")
     icon = app_icon()
     icon.save(os.path.join(ROOT, "icon.png"))
     print("wrote icon.png")

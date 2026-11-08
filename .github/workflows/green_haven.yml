@@ -1,0 +1,116 @@
+name: 🌱 Green Haven
+# Tests the Green Haven game project on the official Godot STABLE release and
+# exports an Android APK (debug-signed; release-signed if keystore secrets exist).
+# Independent of the engine CI in runner.yml.
+
+on:
+  push:
+    paths:
+      - "GreenHaven/**"
+      - ".github/workflows/green_haven.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: green-haven-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: "4.5.1"
+  GODOT_STATUS: "stable"
+
+jobs:
+  test-and-export:
+    name: Tests + Android export (Godot 4.5.1)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout (game project only)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: GreenHaven
+
+      - name: Download Godot ${{ env.GODOT_VERSION }}
+        run: |
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_STATUS}"
+          curl -fsSL -o godot.zip "$base/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64.zip"
+          unzip -q godot.zip -d "$HOME/godot"
+          echo "GODOT=$HOME/godot/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64" >> "$GITHUB_ENV"
+
+      - name: Import project
+        run: timeout 600 "$GODOT" --headless --path GreenHaven --import
+
+      - name: Run tests
+        run: timeout 900 "$GODOT" --headless --path GreenHaven -s res://tests/run_tests.gd
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools build-tools;35.0.0 platforms;android-35"
+
+      - name: Cache export templates
+        id: templates-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.${{ env.GODOT_STATUS }}
+          key: godot-templates-${{ env.GODOT_VERSION }}-${{ env.GODOT_STATUS }}-android
+
+      - name: Install export templates
+        if: steps.templates-cache.outputs.cache-hit != 'true'
+        run: |
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_STATUS}"
+          curl -fsSL -o templates.tpz "$base/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_export_templates.tpz"
+          dest="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_STATUS}"
+          mkdir -p "$dest"
+          # Only the Android templates are needed (keeps the cache small).
+          unzip -q -j templates.tpz "templates/android_*" "templates/version.txt" -d "$dest"
+          ls -la "$dest"
+
+      - name: Create debug keystore
+        run: |
+          keytool -genkeypair -v -keystore "$RUNNER_TEMP/debug.keystore" \
+            -storepass android -keypass android -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: Export debug APK
+        env:
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: ${{ runner.temp }}/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
+        run: |
+          mkdir -p GreenHaven/build
+          timeout 900 "$GODOT" --headless --path GreenHaven --export-debug Android build/GreenHaven-debug.apk
+          test -s GreenHaven/build/GreenHaven-debug.apk
+          ls -la GreenHaven/build
+
+      - name: Export release APK (only if signing secrets are configured)
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+          GODOT_ANDROID_KEYSTORE_RELEASE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
+          GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "No release keystore secret: skipping release export (see GreenHaven/docs/RELEASE.md)."
+            exit 0
+          fi
+          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          export GODOT_ANDROID_KEYSTORE_RELEASE_PATH="$RUNNER_TEMP/release.keystore"
+          timeout 900 "$GODOT" --headless --path GreenHaven --export-release Android build/GreenHaven-release.apk
+          test -s GreenHaven/build/GreenHaven-release.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GreenHaven-android
+          path: GreenHaven/build/*.apk
+          if-no-files-found: error
+          retention-days: 14
