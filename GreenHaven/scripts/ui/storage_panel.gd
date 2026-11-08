@@ -2,17 +2,17 @@ class_name StoragePanel
 extends GamePanel
 ## Warehouse: produce (sell) and seeds, plus the income/expense statistics.
 
-signal message(text: String)
+signal message(text: String, is_error: bool)
 
 enum Tab { PRODUCE, SEEDS, STATS }
 
 
 func _init() -> void:
 	super._init()
-	set_title(tr("UI_STORAGE"))
-	add_tab(tr("UI_TAB_PRODUCE"))
-	add_tab(tr("UI_TAB_SEEDS"))
-	add_tab(tr("UI_TAB_STATS"))
+	set_title("UI_STORAGE")
+	add_tab("UI_TAB_PRODUCE")
+	add_tab("UI_TAB_SEEDS")
+	add_tab("UI_TAB_STATS")
 
 
 func refresh() -> void:
@@ -75,7 +75,7 @@ func _build_stats() -> void:
 		[tr("UI_STAT_INCOME"), EconomyManager.total_income],
 		[tr("UI_STAT_EXPENSE"), EconomyManager.total_expense],
 	]
-	for cat: String in [EconomyManager.CAT_SALES]:
+	for cat: String in [EconomyManager.CAT_SALES, GoalTracker.CAT_GOALS]:
 		rows.append(["  " + tr("UI_CAT_" + cat.to_upper()), EconomyManager.income_by_category.get(cat, 0)])
 	for cat: String in [EconomyManager.CAT_SEEDS, EconomyManager.CAT_EQUIPMENT]:
 		rows.append(["  " + tr("UI_CAT_" + cat.to_upper()), EconomyManager.expense_by_category.get(cat, 0)])
@@ -100,7 +100,7 @@ func _build_stats() -> void:
 func _sell(id: StringName, amount: int) -> void:
 	var price := EconomyManager.get_sell_price(id) * amount
 	if EconomyManager.sell_item(id, amount):
-		message.emit(tr("UI_SOLD_FMT") % price)
+		message.emit(tr("UI_SOLD_FMT") % price, false)
 	refresh()
 
 
@@ -114,5 +114,5 @@ func _sell_everything() -> void:
 			if EconomyManager.sell_item(id, count):
 				revenue += price
 	if revenue > 0:
-		message.emit(tr("UI_SOLD_FMT") % revenue)
+		message.emit(tr("UI_SOLD_FMT") % revenue, false)
 	refresh()

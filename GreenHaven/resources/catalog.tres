@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CatalogData" load_steps=31 format=3]
+[gd_resource type="Resource" script_class="CatalogData" load_steps=41 format=3]
 
 [ext_resource type="Script" path="res://scripts/data/catalog_data.gd" id="1_script"]
 [ext_resource type="Script" path="res://scripts/data/plant_data.gd" id="s_plant"]
@@ -30,12 +30,23 @@
 [ext_resource type="Resource" path="res://resources/placeables/storage_crate.tres" id="25_pl_storage_crate"]
 [ext_resource type="Resource" path="res://resources/placeables/water_tank.tres" id="26_pl_water_tank"]
 [ext_resource type="Resource" path="res://resources/placeables/work_table.tres" id="27_pl_work_table"]
+[ext_resource type="Script" path="res://scripts/data/goal_data.gd" id="s_goal"]
+[ext_resource type="Resource" path="res://resources/goals/g01_plant_first.tres" id="g0_g01_plant_first"]
+[ext_resource type="Resource" path="res://resources/goals/g02_harvest_first.tres" id="g1_g02_harvest_first"]
+[ext_resource type="Resource" path="res://resources/goals/g03_sell_first.tres" id="g2_g03_sell_first"]
+[ext_resource type="Resource" path="res://resources/goals/g04_buy_seeds.tres" id="g3_g04_buy_seeds"]
+[ext_resource type="Resource" path="res://resources/goals/g05_plant_more.tres" id="g4_g05_plant_more"]
+[ext_resource type="Resource" path="res://resources/goals/g06_level_2.tres" id="g5_g06_level_2"]
+[ext_resource type="Resource" path="res://resources/goals/g07_buy_led.tres" id="g6_g07_buy_led"]
+[ext_resource type="Resource" path="res://resources/goals/g08_second_rack.tres" id="g7_g08_second_rack"]
+[ext_resource type="Resource" path="res://resources/goals/g09_level_5.tres" id="g8_g09_level_5"]
 
 [resource]
 script = ExtResource("1_script")
 plants = Array[ExtResource("s_plant")]([ExtResource("2_p_microgreens"), ExtResource("3_p_lettuce"), ExtResource("4_p_basil"), ExtResource("5_p_spinach"), ExtResource("6_p_arugula"), ExtResource("7_p_radish"), ExtResource("8_p_strawberry"), ExtResource("9_p_tomato")])
 equipment = Array[ExtResource("s_equipment")]([ExtResource("10_e_hydro_rack_basic"), ExtResource("11_e_hydro_rack_advanced"), ExtResource("12_e_led_basic"), ExtResource("13_e_led_advanced"), ExtResource("14_e_auto_watering"), ExtResource("15_e_water_tank"), ExtResource("16_e_ph_control"), ExtResource("17_e_nutrient_system")])
 placeables = Array[ExtResource("s_placeable")]([ExtResource("18_pl_auto_watering"), ExtResource("19_pl_decor_monstera"), ExtResource("20_pl_hydro_rack_advanced"), ExtResource("21_pl_hydro_rack_basic"), ExtResource("22_pl_nutrient_system"), ExtResource("23_pl_ph_control"), ExtResource("24_pl_shipping_box"), ExtResource("25_pl_storage_crate"), ExtResource("26_pl_water_tank"), ExtResource("27_pl_work_table")])
+goals = Array[ExtResource("s_goal")]([ExtResource("g0_g01_plant_first"), ExtResource("g1_g02_harvest_first"), ExtResource("g2_g03_sell_first"), ExtResource("g3_g04_buy_seeds"), ExtResource("g4_g05_plant_more"), ExtResource("g5_g06_level_2"), ExtResource("g6_g07_buy_led"), ExtResource("g7_g08_second_rack"), ExtResource("g8_g09_level_5")])
 starting_coins = 100
 starting_items = {
 &"seed_lettuce": 2,

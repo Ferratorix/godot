@@ -10,6 +10,9 @@ extends Node2D
 signal object_selected(object: WorldObject)
 signal selection_cleared
 signal object_moved(instance_key: StringName, from_cell: Vector2i, to_cell: Vector2i)
+## Player picked up / put down an object (feedback hooks: sound, haptics).
+signal drag_started(object: WorldObject)
+signal drag_finished(object: WorldObject, moved: bool)
 
 const WORLD_OBJECT_SCENE: PackedScene = preload("res://scenes/objects/world_object.tscn")
 const WALL_LEFT_TEXTURE: Texture2D = preload("res://assets/placeholder/environment/wall_left.png")
@@ -53,10 +56,14 @@ func build(room_layout: RoomLayoutData, farm_state: FarmState = null) -> void:
 		farm.object_added.disconnect(_on_object_added)
 		farm.slot_changed.disconnect(_on_slot_changed)
 		farm.equipment_changed.disconnect(refresh_all_plants)
+		farm.plant_planted.disconnect(_on_plant_planted)
+		farm.plant_harvested.disconnect(_on_plant_harvested)
 	farm = farm_state if farm_state else FarmState.from_layout(room_layout)
 	farm.object_added.connect(_on_object_added)
 	farm.slot_changed.connect(_on_slot_changed)
 	farm.equipment_changed.connect(refresh_all_plants)
+	farm.plant_planted.connect(_on_plant_planted)
+	farm.plant_harvested.connect(_on_plant_harvested)
 	clear_selection()
 	floor_layer.clear()
 	for container: Node in [walls, objects_root, ambience]:
@@ -89,6 +96,18 @@ func _on_object_added(key: StringName) -> void:
 	var obj := _spawn_view(data, key, grid.get_origin(key))
 	if obj and is_inside_tree() and grid.object_count() > 0:
 		obj.refresh_plants(farm, TimeManager.now())
+
+
+func _on_plant_planted(key: StringName, index: int, _plant_id: StringName) -> void:
+	var obj: WorldObject = _objects.get(key)
+	if obj:
+		obj.play_slot_burst(index, false)
+
+
+func _on_plant_harvested(key: StringName, index: int, _product: StringName, _amount: int) -> void:
+	var obj: WorldObject = _objects.get(key)
+	if obj:
+		obj.play_slot_burst(index, true)
 
 
 func _on_slot_changed(key: StringName, _index: int) -> void:
@@ -192,6 +211,7 @@ func begin_drag(obj: WorldObject) -> bool:
 	_drag_valid = true
 	obj.set_drag_preview(true, true)
 	_show_footprint(obj.cell, obj.data.footprint, CellHighlight.VALID_COLOR)
+	drag_started.emit(obj)
 	return true
 
 
@@ -231,6 +251,7 @@ func end_drag(commit: bool = true) -> bool:
 	_show_footprint(obj.cell, obj.data.footprint, CellHighlight.SELECT_COLOR)
 	if moved:
 		object_moved.emit(obj.instance_key, from_cell, obj.cell)
+	drag_finished.emit(obj, moved)
 	return moved
 
 

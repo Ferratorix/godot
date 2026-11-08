@@ -18,7 +18,8 @@ signal saved(success: bool)
 ## source: "main", "temp", "backup", "new" (nothing usable found)
 signal loaded(source: String)
 
-const FORMAT_VERSION: int = 1
+## v1: v0.2.0. v2: v0.3.0 added the "goals" section.
+const FORMAT_VERSION: int = 2
 const MAIN_FILE := "save.json"
 const TEMP_FILE := "save.tmp"
 const BACKUP_FILE := "save.bak"
@@ -88,6 +89,7 @@ func build_save_data() -> Dictionary:
 		"inventory": InventoryManager.get_state(),
 		"economy": EconomyManager.get_state(),
 		"farm": GameManager.farm.to_dict() if GameManager.farm else {},
+		"goals": GameManager.goals.get_state(),
 	}
 
 
@@ -190,7 +192,7 @@ func read_save_file(file_path: String) -> Dictionary:
 ## Structural validation (types of top-level sections). Values are
 ## sanitised by each system's apply_state().
 func validate_payload(p: Dictionary) -> bool:
-	for section in ["time", "progression", "inventory", "economy", "farm"]:
+	for section in ["time", "progression", "inventory", "economy", "farm", "goals"]:
 		if not p.get(section) is Dictionary:
 			return false
 	return true
@@ -205,6 +207,7 @@ func apply_save_data(data: Dictionary) -> void:
 	ProgressionManager.apply_state(p.progression)
 	InventoryManager.apply_state(p.inventory)
 	EconomyManager.apply_state(p.economy)
+	GameManager.set_goals(GoalTracker.from_state(p.goals))
 	GameManager.set_farm(FarmState.from_dict(p.farm, TimeManager.now()), data.get("saved_at", 0.0))
 	_suspend_tracking = false
 	_dirty = false
@@ -230,6 +233,8 @@ func _migrate(payload: Dictionary, from_version: int) -> Dictionary:
 		match v:
 			0:
 				p = _migrate_v0(p)
+			1:
+				p = _migrate_v1(p)
 			_:
 				return {}
 		v += 1
@@ -247,6 +252,15 @@ func _migrate_v0(old: Dictionary) -> Dictionary:
 		"economy": {"coins": old.get("coins", 0)},
 		"farm": {},
 	}
+
+
+## v1 -> v2: goal chain introduced. Existing players start it from the
+## beginning; goals already satisfied by their state (level, equipment)
+## are completed automatically by GoalTracker.check_state().
+func _migrate_v1(old: Dictionary) -> Dictionary:
+	var p := old.duplicate()
+	p["goals"] = {"index": 0, "progress": 0}
+	return p
 
 
 # --- File helpers -----------------------------------------------------------

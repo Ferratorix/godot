@@ -458,3 +458,105 @@ msgstr "С возвращением! Вас не было %s, созрело р�
 
 msgid "UI_OPEN_STORAGE"
 msgstr "Открыть склад"
+
+msgid "GOAL_PLANT_FIRST"
+msgstr "Посадите микрозелень"
+
+msgid "GOAL_PLANT_FIRST_HINT"
+msgstr "Нажмите на стеллаж, затем «Посадить»."
+
+msgid "GOAL_HARVEST_FIRST"
+msgstr "Соберите первый урожай"
+
+msgid "GOAL_HARVEST_FIRST_HINT"
+msgstr "Микрозелень растёт 5 минут. Нажмите на стеллаж, когда над ним появится зелёный значок."
+
+msgid "GOAL_SELL_FIRST"
+msgstr "Продайте урожай"
+
+msgid "GOAL_SELL_FIRST_HINT"
+msgstr "Откройте «Склад» и нажмите «Все» или «Продать всё»."
+
+msgid "GOAL_BUY_SEEDS"
+msgstr "Купите 3 пакета семян"
+
+msgid "GOAL_BUY_SEEDS_HINT"
+msgstr "«Магазин» → вкладка «Семена»."
+
+msgid "GOAL_PLANT_MORE"
+msgstr "Посадите 5 растений"
+
+msgid "GOAL_PLANT_MORE_HINT"
+msgstr "Не оставляйте места на стеллаже пустыми."
+
+msgid "GOAL_LEVEL_2"
+msgstr "Достигните 2-го уровня"
+
+msgid "GOAL_LEVEL_2_HINT"
+msgstr "Опыт дают посадка, сбор и продажа."
+
+msgid "GOAL_BUY_LED"
+msgstr "Установите LED-освещение"
+
+msgid "GOAL_BUY_LED_HINT"
+msgstr "«Магазин» → «Оборудование». Растения будут расти на 10% быстрее."
+
+msgid "GOAL_SECOND_RACK"
+msgstr "Купите второй стеллаж"
+
+msgid "GOAL_SECOND_RACK_HINT"
+msgstr "Больше мест — больше урожая."
+
+msgid "GOAL_LEVEL_5"
+msgstr "Достигните 5-го уровня"
+
+msgid "GOAL_LEVEL_5_HINT"
+msgstr "Откроются редис и новое оборудование."
+
+msgid "UI_SETTINGS"
+msgstr "Настройки"
+
+msgid "UI_LANGUAGE"
+msgstr "Язык"
+
+msgid "UI_SOUND"
+msgstr "Звуки"
+
+msgid "UI_MUSIC"
+msgstr "Музыка"
+
+msgid "UI_BATTERY_SAVER"
+msgstr "Экономия батареи (30 FPS)"
+
+msgid "UI_RESET_PROGRESS"
+msgstr "Сбросить прогресс"
+
+msgid "UI_RESET_CONFIRM"
+msgstr "Точно? Нажмите ещё раз"
+
+msgid "UI_RESET_DONE"
+msgstr "Прогресс сброшен. Начинаем заново!"
+
+msgid "UI_VERSION_FMT"
+msgstr "Версия %s"
+
+msgid "UI_GOAL_REWARD_FMT"
+msgstr "Награда: %d"
+
+msgid "UI_GOAL_PROGRESS_FMT"
+msgstr "%d / %d"
+
+msgid "UI_GOAL_DONE_FMT"
+msgstr "Задание выполнено: %s"
+
+msgid "UI_GOAL_DONE_REWARD_FMT"
+msgstr "Задание выполнено: %s (+%d монет)"
+
+msgid "UI_GOALS_FINISHED"
+msgstr "Все задания выполнены — ферма ваша!"
+
+msgid "UI_CAT_GOALS"
+msgstr "награда за задание"
+
+msgid "UI_SETTINGS_SAVED_NOTE"
+msgstr "Настройки хранятся отдельно от прогресса."

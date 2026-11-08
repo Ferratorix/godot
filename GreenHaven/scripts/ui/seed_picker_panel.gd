@@ -2,7 +2,7 @@ class_name SeedPickerPanel
 extends GamePanel
 ## Chooses which seed to plant into a specific grow slot.
 
-signal message(text: String)
+signal message(text: String, is_error: bool)
 signal shop_requested
 
 var object_key: StringName
@@ -11,7 +11,7 @@ var slot_index: int = -1
 
 func _init() -> void:
 	super._init()
-	set_title(tr("UI_CHOOSE_SEED"))
+	set_title("UI_CHOOSE_SEED")
 
 
 func open_for(key: StringName, index: int) -> void:
@@ -47,7 +47,7 @@ func _plant(plant: PlantData) -> void:
 	if GameManager.farm.plant(object_key, slot_index, plant.id):
 		close()
 	else:
-		message.emit(tr(GameManager.farm.can_plant(object_key, slot_index, plant)))
+		message.emit(tr(GameManager.farm.can_plant(object_key, slot_index, plant)), true)
 		refresh()
 
 

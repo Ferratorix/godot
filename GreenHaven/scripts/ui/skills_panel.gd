@@ -13,7 +13,7 @@ var SKILL_KEYS := {
 
 func _init() -> void:
 	super._init()
-	set_title(tr("UI_SKILLS"))
+	set_title("UI_SKILLS")
 
 
 func refresh() -> void:

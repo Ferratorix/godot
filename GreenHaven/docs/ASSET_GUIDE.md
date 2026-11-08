@@ -52,6 +52,12 @@
 | `placeholder/icons/product_*, seed_*, equipment_*` | иконки 16×16 для UI |
 | `placeholder/ui/icon_*.png` | иконки HUD 12×12 (монета, звезда, магазин, склад, навыки, «готово») |
 
+### Звук (временный)
+`tools/generate_placeholder_audio.py` → `assets/placeholder/audio/*.wav` (моно, 22 050 Гц).
+Мягкие синусоиды/треугольники, без резких частот. Музыка: 80 BPM, C–Am–F–G, 24 с,
+бесшовная петля. Финальная музыка — OGG Vorbis, эффекты — WAV/QOA; громкость эффектов
+выровнена на пик −4,4 dBFS, музыки −7 dBFS.
+
 ### Растения
 * Кадр 12×14, линия грунта на 2 px выше нижнего края (`WorldObject.PLANT_SOIL_OFFSET`).
 * Позиции на стеллаже — `PlaceableData.slot_positions` (относительно центра основания).

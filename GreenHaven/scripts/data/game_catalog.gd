@@ -53,6 +53,10 @@ static func all_equipment() -> Array[EquipmentData]:
 	return data().equipment
 
 
+static func goals() -> Array[GoalData]:
+	return data().goals
+
+
 static func _load() -> void:
 	_data = load(CATALOG_PATH)
 	if _data == null:

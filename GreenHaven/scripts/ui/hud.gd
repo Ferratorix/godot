@@ -12,6 +12,11 @@ signal recenter_requested
 signal move_requested(object: WorldObject)
 signal move_cancel_requested
 signal deselect_requested
+## Feedback hooks (sound): a toast was shown / a modal panel opened.
+signal toast_shown(is_error: bool)
+signal panel_opened
+## A guided goal was completed.
+signal goal_completed(goal: GoalData)
 
 const CATEGORY_KEYS := {
 	PlaceableData.Category.FURNITURE: "CATEGORY_FURNITURE",
@@ -28,6 +33,10 @@ var shop_panel: ShopPanel
 var storage_panel: StoragePanel
 var skills_panel: SkillsPanel
 var seed_picker: SeedPickerPanel
+var settings_panel: SettingsPanel
+var _goals: GoalTracker
+var _shown_coins: float = 0.0
+var _coins_tween: Tween
 var _open_panel: GamePanel
 var _shown_object: WorldObject
 var _panel_tween: Tween
@@ -65,12 +74,15 @@ func _ready() -> void:
 	%ShopButton.pressed.connect(func() -> void: open_panel(shop_panel))
 	%StorageButton.pressed.connect(func() -> void: open_panel(storage_panel))
 	skills_button.pressed.connect(func() -> void: open_panel(skills_panel))
+	%SettingsButton.pressed.connect(func() -> void: open_panel(settings_panel))
 	%Dim.gui_input.connect(_on_dim_input)
 	_create_panels()
 
 	GameManager.back_requested.connect(handle_back)
 	GameManager.farm_replaced.connect(_bind_farm)
 	GameManager.welcome_back.connect(_on_welcome_back)
+	GameManager.goals_replaced.connect(_bind_goals)
+	_bind_goals(GameManager.goals)
 	EconomyManager.coins_changed.connect(func(_c: int, _d: int) -> void: _on_state_changed())
 	InventoryManager.item_changed.connect(func(_i: StringName, _c: int, _d: int) -> void:
 		_on_state_changed())
@@ -81,6 +93,7 @@ func _ready() -> void:
 	TimeManager.second_tick.connect(func(_now: float) -> void: _update_slot_widgets())
 	if GameManager.farm:
 		_bind_farm(GameManager.farm)
+	_shown_coins = EconomyManager.coins
 	_update_top_bar()
 
 
@@ -91,12 +104,13 @@ func _create_panels() -> void:
 	storage_panel = StoragePanel.new()
 	skills_panel = SkillsPanel.new()
 	seed_picker = SeedPickerPanel.new()
-	for p: GamePanel in [shop_panel, storage_panel, skills_panel, seed_picker]:
+	settings_panel = SettingsPanel.new()
+	for p: GamePanel in [shop_panel, storage_panel, skills_panel, seed_picker, settings_panel]:
 		p.visible = false
 		p.closed.connect(_on_panel_closed.bind(p))
 		%Center.add_child(p)
 		if p.has_signal("message"):
-			p.connect("message", show_toast)
+			p.connect("message", show_toast)  # (text, is_error)
 	seed_picker.shop_requested.connect(func() -> void: open_panel(shop_panel))
 
 
@@ -106,6 +120,7 @@ func open_panel(panel: GamePanel) -> void:
 	_open_panel = panel
 	modal_layer.visible = true
 	panel.open()
+	panel_opened.emit()
 
 
 func close_panel() -> void:
@@ -132,7 +147,7 @@ func _on_dim_input(event: InputEvent) -> void:
 
 
 func _update_top_bar() -> void:
-	coins_label.text = str(EconomyManager.coins)
+	_animate_coins(EconomyManager.coins)
 	level_label.text = tr("UI_LEVEL_SHORT_FMT") % ProgressionManager.level
 	xp_bar.value = 1.0 if ProgressionManager.is_max_level() \
 		else float(ProgressionManager.xp) / ProgressionManager.xp_to_next_level()
@@ -145,6 +160,79 @@ func _on_state_changed() -> void:
 	if _open_panel:
 		_open_panel.refresh()
 	_update_slot_widgets()
+
+
+## Counts the coin label up/down to the new balance.
+func _animate_coins(target: int) -> void:
+	if _coins_tween and _coins_tween.is_valid():
+		_coins_tween.kill()
+	if not is_inside_tree() or absf(target - _shown_coins) < 1.0:
+		_set_shown_coins(target)
+		return
+	_coins_tween = create_tween()
+	_coins_tween.tween_method(_set_shown_coins, _shown_coins, float(target), 0.45) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	if target > _shown_coins:
+		coins_label.pivot_offset = coins_label.size * 0.5
+		coins_label.scale = Vector2(1.15, 1.15)
+		_coins_tween.parallel().tween_property(coins_label, "scale", Vector2.ONE, 0.3)
+
+
+func _set_shown_coins(value: float) -> void:
+	_shown_coins = value
+	coins_label.text = str(roundi(value))
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_update_top_bar()
+		_update_goal_card()
+		if _shown_object:
+			show_object(_shown_object)
+
+
+# --- Goals ------------------------------------------------------------------
+
+func _bind_goals(goals: GoalTracker) -> void:
+	if _goals and _goals.goal_changed.is_connected(_on_goal_changed):
+		_goals.goal_changed.disconnect(_on_goal_changed)
+		_goals.goal_completed.disconnect(_on_goal_completed)
+	_goals = goals
+	_goals.goal_changed.connect(_on_goal_changed)
+	_goals.goal_completed.connect(_on_goal_completed)
+	_update_goal_card()
+
+
+func _on_goal_changed(_goal: GoalData, _progress: int) -> void:
+	_update_goal_card()
+
+
+func _on_goal_completed(goal: GoalData) -> void:
+	if goal.reward_coins > 0:
+		show_toast(tr("UI_GOAL_DONE_REWARD_FMT") % [tr(goal.title_key), goal.reward_coins])
+	else:
+		show_toast(tr("UI_GOAL_DONE_FMT") % tr(goal.title_key))
+	if _goals.is_finished():
+		show_toast(tr("UI_GOALS_FINISHED"))
+	goal_completed.emit(goal)
+	_update_goal_card()
+
+
+## The goal card replaces the static hint; hidden when an info panel or the
+## move banner needs the space, and after the last goal.
+func _update_goal_card() -> void:
+	var goal: GoalData = _goals.current() if _goals else null
+	hint_panel.visible = goal != null and _shown_object == null and not move_banner.visible
+	if goal == null:
+		return
+	%GoalTitle.text = tr(goal.title_key)
+	%GoalHint.text = tr(goal.hint_key)
+	var progress_text := tr("UI_GOAL_PROGRESS_FMT") % [mini(_goals.progress, goal.count), goal.count]
+	if goal.event == GoalData.EVENT_LEVEL:
+		progress_text = tr("UI_LEVEL_FMT") % ProgressionManager.level + " / " + str(goal.count)
+	if goal.reward_coins > 0:
+		progress_text += "   ·   " + tr("UI_GOAL_REWARD_FMT") % goal.reward_coins
+	%GoalProgress.text = progress_text
 
 
 func _on_level_up(new_level: int) -> void:
@@ -185,6 +273,7 @@ func show_object(obj: WorldObject) -> void:
 	refresh_cell(obj)
 	move_button.disabled = not obj.data.movable
 	_rebuild_slots()
+	_update_goal_card()
 	if not info_panel.visible:
 		_animate_info_panel(true)
 
@@ -199,6 +288,7 @@ func hide_object() -> void:
 	_slot_widgets.clear()
 	if info_panel.visible:
 		_animate_info_panel(false)
+	_update_goal_card()
 
 
 ## Rebuilds the slot rows of the selected rack (structure changes only).
@@ -306,10 +396,10 @@ func show_harvest_result(result: Dictionary, screen_pos: Vector2 = Vector2(-1, -
 
 # --- Feedback ------------------------------------------------------------------
 
-func show_toast(text: String) -> void:
+func show_toast(text: String, is_error: bool = false) -> void:
 	var panel := PanelContainer.new()
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var l := UiKit.label(text, 10, Color(0, 0, 0, 0), true)
+	var l := UiKit.label(text, 10, UiKit.WARN_COLOR if is_error else Color(0, 0, 0, 0), true)
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	panel.add_child(l)
 	%ToastBox.add_child(panel)
@@ -319,6 +409,7 @@ func show_toast(text: String) -> void:
 	t.tween_interval(TOAST_TIME)
 	t.tween_property(panel, "modulate:a", 0.0, 0.4)
 	t.tween_callback(panel.queue_free)
+	toast_shown.emit(is_error)
 
 
 ## Rising "+N" text at a screen position (harvest feedback).
@@ -337,17 +428,8 @@ func show_float_text(screen_pos: Vector2, text: String) -> void:
 
 func set_move_mode(active: bool) -> void:
 	move_banner.visible = active
-	if active:
-		hint_panel.visible = false
+	_update_goal_card()
 	info_panel.self_modulate.a = 0.6 if active else 1.0
-
-
-func hide_hint() -> void:
-	if not hint_panel.visible:
-		return
-	var t := create_tween()
-	t.tween_property(hint_panel, "modulate:a", 0.0, 0.4)
-	t.tween_callback(hint_panel.hide)
 
 
 func is_panel_open() -> bool:

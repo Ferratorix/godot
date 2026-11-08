@@ -4,12 +4,12 @@ extends Node
 
 @onready var world: FarmWorld = $FarmWorld
 @onready var hud: Hud = $UI/Hud
+@onready var sound: SoundPlayer = $Sound
 
 
 func _ready() -> void:
 	world.selection_changed.connect(_on_selection_changed)
 	world.object_moved.connect(_on_object_moved)
-	world.player_interacted.connect(hud.hide_hint)
 	world.move_mode_changed.connect(hud.set_move_mode)
 	world.harvested.connect(func(pos: Vector2, result: Dictionary) -> void:
 		hud.show_harvest_result(result, pos))
@@ -18,6 +18,15 @@ func _ready() -> void:
 	hud.deselect_requested.connect(_on_deselect_requested)
 	hud.move_requested.connect(_on_move_requested)
 	hud.move_cancel_requested.connect(_on_move_cancel_requested)
+	# Audio feedback for world/UI events (gameplay never calls audio directly).
+	world.room.drag_started.connect(func(_o: WorldObject) -> void: sound.play(&"pickup"))
+	world.room.drag_finished.connect(func(_o: WorldObject, _m: bool) -> void: sound.play(&"place"))
+	hud.panel_opened.connect(func() -> void: sound.play(&"panel"))
+	hud.toast_shown.connect(func(is_error: bool) -> void:
+		if is_error:
+			sound.play(&"error"))
+	hud.goal_completed.connect(func(g: GoalData) -> void:
+		sound.play(&"coins" if g.reward_coins > 0 else &"buy"))
 
 
 func _on_selection_changed(obj: WorldObject) -> void:

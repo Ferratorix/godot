@@ -132,6 +132,7 @@ func test_shop_buy_through_ui_updates_top_bar() -> void:
 	buy.pressed.emit()
 	check_eq(EconomyManager.coins, 95)
 	check_eq(InventoryManager.get_count(&"seed_microgreens"), 5)
+	await tree.create_timer(0.6).timeout  # Coin counter animates.
 	check_eq(hud.coins_label.text, "95")
 	hud.shop_panel.select_tab(ShopPanel.Tab.EQUIPMENT)
 	await frames(1)
@@ -167,3 +168,46 @@ func test_buying_rack_spawns_it_in_the_room() -> void:
 	var before: int = main.world.room.objects_root.get_child_count()
 	check(GameManager.farm.purchase_equipment(&"hydro_rack_basic"))
 	check_eq(main.world.room.objects_root.get_child_count(), before + 1)
+
+
+func test_goal_card_shows_first_goal_and_advances() -> void:
+	var hud: Hud = main.hud
+	check(hud.hint_panel.visible, "goal card visible on start")
+	check_eq(hud.get_node("%GoalTitle").text, tr("GOAL_PLANT_FIRST"))
+	GameManager.farm.plant(_rack().instance_key, 0, &"microgreens")
+	check_eq(hud.get_node("%GoalTitle").text, tr("GOAL_HARVEST_FIRST"))
+	main.world.room.select_object(_rack())
+	check(not hud.hint_panel.visible, "card hidden while info panel is open")
+
+
+func test_settings_language_switch_and_reset() -> void:
+	var hud: Hud = main.hud
+	hud.open_panel(hud.settings_panel)
+	await frames(1)
+	_button(hud.settings_panel, "EN").pressed.emit()
+	check_eq(TranslationServer.get_locale(), "en")
+	await frames(2)
+	check_eq(hud.get_node("%GoalTitle").text, "Plant microgreens", "UI re-translated")
+	check_eq((hud.get_node("%ShopButton") as Button).text, "UI_SHOP", "key kept, auto-translated")
+	_button(hud.settings_panel, "RU").pressed.emit()
+	check_eq(TranslationServer.get_locale(), "ru")
+	EconomyManager.add_coins(500)
+	var reset := _button(hud.settings_panel, "UI_RESET_PROGRESS")
+	reset.pressed.emit()
+	check_eq(EconomyManager.coins, 600, "first tap only arms")
+	await frames(1)
+	_button(hud.settings_panel, "UI_RESET_CONFIRM").pressed.emit()
+	check_eq(EconomyManager.coins, 100, "second tap resets")
+	check(hud.get_open_panel() == null)
+
+
+func test_sounds_follow_game_events() -> void:
+	var sound: SoundPlayer = main.sound
+	GameManager.farm.plant(_rack().instance_key, 0, &"microgreens")
+	check_eq(sound.last_played, &"plant")
+	await tree.create_timer(0.1).timeout  # Repeat filter window.
+	InventoryManager.add_item(&"lettuce", 1)
+	EconomyManager.sell_item(&"lettuce", 1)
+	check_eq(sound.last_played, &"coins")
+	main.hud.open_panel(main.hud.shop_panel)
+	check_eq(sound.last_played, &"panel")

@@ -458,3 +458,105 @@ msgstr "Welcome back! You were away %s, plants ripened: %d"
 
 msgid "UI_OPEN_STORAGE"
 msgstr "Open storage"
+
+msgid "GOAL_PLANT_FIRST"
+msgstr "Plant microgreens"
+
+msgid "GOAL_PLANT_FIRST_HINT"
+msgstr "Tap the rack, then «Plant»."
+
+msgid "GOAL_HARVEST_FIRST"
+msgstr "Harvest your first crop"
+
+msgid "GOAL_HARVEST_FIRST_HINT"
+msgstr "Microgreens take 5 minutes. Tap the rack when the green mark appears."
+
+msgid "GOAL_SELL_FIRST"
+msgstr "Sell your harvest"
+
+msgid "GOAL_SELL_FIRST_HINT"
+msgstr "Open «Storage» and tap «All» or «Sell everything»."
+
+msgid "GOAL_BUY_SEEDS"
+msgstr "Buy 3 seed packets"
+
+msgid "GOAL_BUY_SEEDS_HINT"
+msgstr "«Shop» → «Seeds» tab."
+
+msgid "GOAL_PLANT_MORE"
+msgstr "Plant 5 crops"
+
+msgid "GOAL_PLANT_MORE_HINT"
+msgstr "Keep every rack slot busy."
+
+msgid "GOAL_LEVEL_2"
+msgstr "Reach level 2"
+
+msgid "GOAL_LEVEL_2_HINT"
+msgstr "Planting, harvesting and selling give XP."
+
+msgid "GOAL_BUY_LED"
+msgstr "Install LED lighting"
+
+msgid "GOAL_BUY_LED_HINT"
+msgstr "«Shop» → «Equipment». Crops will grow 10% faster."
+
+msgid "GOAL_SECOND_RACK"
+msgstr "Buy a second rack"
+
+msgid "GOAL_SECOND_RACK_HINT"
+msgstr "More slots, more harvest."
+
+msgid "GOAL_LEVEL_5"
+msgstr "Reach level 5"
+
+msgid "GOAL_LEVEL_5_HINT"
+msgstr "Radish and new equipment unlock."
+
+msgid "UI_SETTINGS"
+msgstr "Settings"
+
+msgid "UI_LANGUAGE"
+msgstr "Language"
+
+msgid "UI_SOUND"
+msgstr "Sound effects"
+
+msgid "UI_MUSIC"
+msgstr "Music"
+
+msgid "UI_BATTERY_SAVER"
+msgstr "Battery saver (30 FPS)"
+
+msgid "UI_RESET_PROGRESS"
+msgstr "Reset progress"
+
+msgid "UI_RESET_CONFIRM"
+msgstr "Sure? Tap again"
+
+msgid "UI_RESET_DONE"
+msgstr "Progress reset. Starting over!"
+
+msgid "UI_VERSION_FMT"
+msgstr "Version %s"
+
+msgid "UI_GOAL_REWARD_FMT"
+msgstr "Reward: %d"
+
+msgid "UI_GOAL_PROGRESS_FMT"
+msgstr "%d / %d"
+
+msgid "UI_GOAL_DONE_FMT"
+msgstr "Goal complete: %s"
+
+msgid "UI_GOAL_DONE_REWARD_FMT"
+msgstr "Goal complete: %s (+%d coins)"
+
+msgid "UI_GOALS_FINISHED"
+msgstr "All goals done — the farm is yours!"
+
+msgid "UI_CAT_GOALS"
+msgstr "goal reward"
+
+msgid "UI_SETTINGS_SAVED_NOTE"
+msgstr "Settings are stored separately from progress."

@@ -4,16 +4,16 @@ extends GamePanel
 ## (seeds) or FarmState.purchase_equipment (which charges EconomyManager).
 
 ## Emitted with a translation key when a purchase fails.
-signal message(text: String)
+signal message(text: String, is_error: bool)
 
 enum Tab { SEEDS, EQUIPMENT }
 
 
 func _init() -> void:
 	super._init()
-	set_title(tr("UI_SHOP"))
-	add_tab(tr("UI_TAB_SEEDS"))
-	add_tab(tr("UI_TAB_EQUIPMENT"))
+	set_title("UI_SHOP")
+	add_tab("UI_TAB_SEEDS")
+	add_tab("UI_TAB_EQUIPMENT")
 
 
 func refresh() -> void:
@@ -90,14 +90,14 @@ func _reason_text(reason: String, e: EquipmentData) -> String:
 
 func _buy_seeds(plant: PlantData, amount: int) -> void:
 	if not EconomyManager.buy_item(plant.seed_item_id(), amount):
-		message.emit(tr("ERR_NO_MONEY"))
+		message.emit(tr("ERR_NO_MONEY"), true)
 	refresh()
 
 
 func _buy_equipment(e: EquipmentData) -> void:
 	var reason := GameManager.farm.can_purchase_equipment(e)
 	if reason != FarmState.OK or not GameManager.farm.purchase_equipment(e.id):
-		message.emit(tr(reason if reason != "" else FarmState.ERR_UNKNOWN))
+		message.emit(tr(reason if reason != "" else FarmState.ERR_UNKNOWN), true)
 	else:
-		message.emit(tr("UI_BOUGHT_FMT") % tr(e.name_key))
+		message.emit(tr("UI_BOUGHT_FMT") % tr(e.name_key), false)
 	refresh()

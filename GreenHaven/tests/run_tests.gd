@@ -17,6 +17,11 @@ func _run() -> void:
 	save_manager.save_dir = "user://test_saves"
 	save_manager.autosave_enabled = false
 	save_manager.delete_all_saves()
+	# Settings too: tests always start from defaults (Russian, sound on).
+	var settings: GDScript = load("res://scripts/core/game_settings.gd")
+	settings.path = "user://test_saves/settings.cfg"
+	settings.reset_to_defaults()
+	settings.apply()
 	root.get_node("GameManager").new_game()
 	var total := 0
 	var failed := 0

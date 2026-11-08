@@ -11,6 +11,8 @@ extends RefCounted
 signal slot_changed(object_key: StringName, slot_index: int)
 signal plant_harvested(object_key: StringName, slot_index: int, product_id: StringName, amount: int)
 signal object_added(object_key: StringName)
+signal plant_planted(object_key: StringName, slot_index: int, plant_id: StringName)
+signal equipment_purchased(equipment_id: StringName)
 signal equipment_changed
 signal state_changed
 
@@ -136,6 +138,7 @@ func plant(key: StringName, index: int, plant_id: StringName) -> bool:
 	(slots[key] as Array)[index] = instance
 	ProgressionManager.add_xp(ProgressionManager.XP_PER_PLANTING)
 	slot_changed.emit(key, index)
+	plant_planted.emit(key, index, plant_id)
 	state_changed.emit()
 	return true
 
@@ -283,6 +286,7 @@ func purchase_equipment(id: StringName) -> bool:
 	if e.placeable:
 		add_object(e.placeable, find_free_cell(e.placeable.footprint))
 	equipment_changed.emit()
+	equipment_purchased.emit(id)
 	state_changed.emit()
 	return true
 

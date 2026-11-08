@@ -526,6 +526,11 @@ def ui_small_icon(kind: str) -> Image.Image:
         d.ellipse([1, 2, 6, 6], fill=LEAF_HI)
         d.ellipse([6, 0, 11, 4], fill=CREAM)
         d.point((6, 11), fill=CREAM)
+    elif kind == "settings":
+        d.ellipse([2, 2, 9, 9], fill=CREAM)
+        for x, y in ((5, 0), (5, 10), (0, 5), (10, 5), (1, 1), (9, 1), (1, 9), (9, 9)):
+            d.rectangle([x, y, x + 1, y + 1], fill=CREAM)
+        d.ellipse([4, 4, 7, 7], fill=LEAF_DARK)
     elif kind == "ready":
         d.ellipse([0, 0, 11, 11], fill=LEAF, outline=OUTLINE)
         d.line([(3, 6), (5, 8), (8, 3)], fill=CREAM)
@@ -671,7 +676,7 @@ def main() -> None:
     for kind in ("hydro_rack_basic", "hydro_rack_advanced", "led_basic", "led_advanced",
                  "auto_watering", "water_tank", "ph_control", "nutrient_system"):
         save(equipment_icon(kind), f"icons/equipment_{kind}.png")
-    for kind in ("coin", "star", "shop", "storage", "skills", "ready"):
+    for kind in ("coin", "star", "shop", "storage", "skills", "ready", "settings"):
         save(ui_small_icon(kind), f"ui/icon_{kind}.png")
     save(storage_crate(), "objects/storage_crate.png")
     save(work_table(), "objects/work_table.png")

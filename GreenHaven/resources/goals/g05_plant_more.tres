@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"g05_plant_more"
+title_key = "GOAL_PLANT_MORE"
+hint_key = "GOAL_PLANT_MORE_HINT"
+event = &"planted"
+target = &""
+count = 5
+reward_coins = 15

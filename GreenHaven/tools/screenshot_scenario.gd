@@ -33,7 +33,7 @@ func run(tree: SceneTree, args: Dictionary) -> void:
 	if args.has("panel"):
 		var hud: Hud = main.hud
 		var panel: GamePanel = {"shop": hud.shop_panel, "storage": hud.storage_panel,
-			"skills": hud.skills_panel}[args.panel]
+			"skills": hud.skills_panel, "settings": hud.settings_panel}[args.panel]
 		hud.open_panel(panel)
 		if args.has("tab"):
 			panel.select_tab(int(args.tab))

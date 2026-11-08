@@ -31,8 +31,9 @@
         │
  Представление (узлы)         FarmWorld ─► FarmRoom ─► WorldObject (растения, LED, маркер)
                               IsoCamera, TouchGestureHandler
-                              Hud ─► ShopPanel / StoragePanel / SkillsPanel / SeedPickerPanel
-                              Main связывает FarmWorld и Hud
+                              Hud ─► Shop / Storage / Skills / SeedPicker / Settings panels
+                              SoundPlayer (только слушает сигналы)
+                              Main связывает FarmWorld, Hud и SoundPlayer
 ```
 
 Правила:
@@ -61,7 +62,10 @@
 | PlacementGrid | `scripts/world/placement_grid.gd` | занятость клеток, сериализация |
 | FarmRoom / WorldObject | `scripts/world/` | отображение комнаты, объектов и растений; выбор и перетаскивание |
 | IsoCamera / TouchGestureHandler / FarmWorld | `scripts/world/` | камера, жесты, политика взаимодействия |
-| Hud + панели | `scripts/ui/` | интерфейс |
+| Hud + панели | `scripts/ui/` | интерфейс, карточка задания, настройки |
+| GoalTracker / GoalData | `scripts/progression/goal_tracker.gd`, `scripts/data/goal_data.gd` | цепочка заданий (обучение), награды |
+| GameSettings | `scripts/core/game_settings.gd` | язык, громкость, лимит FPS; `user://settings.cfg` |
+| SoundPlayer | `scripts/audio/sound_player.gd` | звуки по сигналам, музыка; пул из 6 голосов |
 
 ## Рост растений
 * При посадке: `planted_at = now`, `ready_at = now + base × time_multiplier`,
@@ -73,12 +77,20 @@
 
 ## Сохранения
 ```
-save.json   строка 1: {"format_version":1,"game_version":"0.2.0","saved_at":…,"checksum":"<sha256 строки 2>"}
-            строка 2: {"time":{…},"progression":{…},"inventory":{…},"economy":{…},"farm":{…}}
+save.json   строка 1: {"format_version":2,"game_version":"0.3.0","saved_at":…,"checksum":"<sha256 строки 2>"}
+            строка 2: {"time":{…},"progression":{…},"inventory":{…},"economy":{…},"farm":{…},"goals":{…}}
 ```
 Запись: `save.tmp` → проверка чтением → `save.json` переименовывается в `save.bak` →
 `save.tmp` → `save.json`. Загрузка: `save.json` → `save.tmp` → `save.bak` → новая игра.
-Повреждённый основной файл сохраняется как `save.corrupt`. Новая версия формата добавляется
+Повреждённый основной файл сохраняется как `save.corrupt`.
+История форматов: v0 — прототип (плоский словарь), v1 — 0.2.0, v2 — 0.3.0 (+ `goals`).
+Настройки хранятся отдельно (`settings.cfg`) и не сбрасываются вместе с прогрессом.
+
+## Звук
+`SoundPlayer` — не autoload, а узел главной сцены: он только подписывается на сигналы
+(`FarmState`, `EconomyManager`, `ProgressionManager`, `Hud`, `FarmRoom`) и на каждую кнопку
+через `SceneTree.node_added`. Игровая логика о звуке не знает. Один и тот же звук не
+перезапускается чаще чем раз в 70 мс (массовый сбор). Новая версия формата добавляется
 шагом в `SaveManager._migrate()`.
 
 ## Ключевые правила

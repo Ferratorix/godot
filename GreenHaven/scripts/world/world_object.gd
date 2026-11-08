@@ -16,6 +16,12 @@ var cell: Vector2i
 var is_selected: bool = false
 
 const READY_ICON: Texture2D = preload("res://assets/placeholder/ui/icon_ready.png")
+const SWAY_SHADER: Shader = preload("res://resources/shaders/plant_sway.gdshader")
+const LEAF_COLOR := Color(0.55, 0.8, 0.42)
+const SOIL_COLOR := Color(0.55, 0.42, 0.3)
+
+## One material shared by every plant sprite (one shader instance in total).
+static var _sway_material: ShaderMaterial
 ## Plant soil line sits this many px above the sprite's bottom edge.
 const PLANT_SOIL_OFFSET: Vector2 = Vector2(-6, -12)
 
@@ -25,6 +31,7 @@ var _plant_sprites: Array[Sprite2D] = []
 var _ready_icon: Sprite2D
 var _glow: Polygon2D
 var _ready_tween: Tween
+var _shown_stages: Array[int] = []
 
 
 func setup(placeable: PlaceableData, key: StringName, at_cell: Vector2i) -> void:
@@ -55,9 +62,13 @@ func refresh_plants(farm: FarmState, now_unix: float) -> void:
 		var s := _plant_sprites[i]
 		if p == null or p.get_data() == null:
 			s.visible = false
+			_shown_stages[i] = -1
 			continue
 		var stage := p.get_stage(now_unix)
 		s.texture = p.get_data().stage_textures[stage]
+		if s.visible and _shown_stages[i] >= 0 and stage > _shown_stages[i]:
+			_pop(s)  # The plant just grew to the next stage.
+		_shown_stages[i] = stage
 		s.visible = true
 		any_ready = any_ready or stage == PlantData.Stage.MATURE
 	_set_ready_marker(any_ready)
@@ -77,8 +88,13 @@ func _build_slot_visuals() -> void:
 	_glow.vertex_colors = PackedColorArray([c, c, Color(c, 0.0), Color(c, 0.0)])
 	_glow.visible = false
 	sprite.add_child(_glow)
+	if _sway_material == null:
+		_sway_material = ShaderMaterial.new()
+		_sway_material.shader = SWAY_SHADER
 	for pos in data.slot_positions:
 		var s := Sprite2D.new()
+		s.material = _sway_material
+		_shown_stages.append(-1)
 		s.centered = false
 		s.position = pos
 		s.offset = PLANT_SOIL_OFFSET
@@ -90,6 +106,38 @@ func _build_slot_visuals() -> void:
 	_ready_icon.position = Vector2(0, -data.texture_anchor.y - 8)
 	_ready_icon.visible = false
 	sprite.add_child(_ready_icon)
+
+
+## Small particle puff at a slot: leaves on harvest, soil on planting.
+func play_slot_burst(slot_index: int, harvest: bool) -> void:
+	if slot_index < 0 or slot_index >= _plant_sprites.size():
+		return
+	var p := CPUParticles2D.new()
+	p.one_shot = true
+	p.emitting = false
+	p.amount = 10 if harvest else 6
+	p.lifetime = 0.6
+	p.explosiveness = 0.9
+	p.direction = Vector2.UP
+	p.spread = 70.0
+	p.initial_velocity_min = 18.0
+	p.initial_velocity_max = 34.0
+	p.gravity = Vector2(0, 90)
+	p.scale_amount_min = 1.0
+	p.scale_amount_max = 2.0
+	p.color = LEAF_COLOR if harvest else SOIL_COLOR
+	p.position = _plant_sprites[slot_index].position + Vector2(0, -4)
+	sprite.add_child(p)
+	p.emitting = true
+	p.finished.connect(p.queue_free)
+	if harvest:
+		_bounce(Vector2(1.06, 0.94))
+
+
+func _pop(s: Sprite2D) -> void:
+	s.scale = Vector2(1.25, 0.8)
+	var t := s.create_tween()
+	t.tween_property(s, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 
 func _set_ready_marker(show_it: bool) -> void:

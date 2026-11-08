@@ -5,6 +5,7 @@ extends PanelContainer
 ## touch-scrollable content list. Subclasses override refresh().
 
 signal closed
+signal opened
 
 const PANEL_SIZE := Vector2(400, 290)
 
@@ -41,6 +42,7 @@ func _init() -> void:
 	scroll.add_child(content)
 
 
+## [param text] may be a translation key: Labels auto-translate on locale change.
 func set_title(text: String) -> void:
 	title_label.text = text
 
@@ -71,6 +73,19 @@ func refresh() -> void:
 func open() -> void:
 	visible = true
 	refresh()
+	# Pop-in (scale only: never animate the position of a container child).
+	pivot_offset = size * 0.5 if size != Vector2.ZERO else PANEL_SIZE * 0.5
+	scale = Vector2(0.94, 0.94)
+	modulate.a = 0.0
+	var t := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.tween_property(self, "scale", Vector2.ONE, 0.18)
+	t.tween_property(self, "modulate:a", 1.0, 0.12)
+	opened.emit()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and visible and is_node_ready():
+		refresh()
 
 
 func close() -> void:

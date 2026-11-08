@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=13 format=3]
+[gd_resource type="Theme" load_steps=16 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/placeholder/ui/panel_wood.png" id="1_panel"]
 [ext_resource type="Texture2D" path="res://assets/placeholder/ui/button_normal.png" id="2_btn_n"]
@@ -79,6 +79,40 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.408, 0.259, 0.165, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.886, 0.804, 0.651, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.408, 0.259, 0.165, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_fill"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.435, 0.639, 0.353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.408, 0.259, 0.165, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_check"]
+content_margin_left = 2.0
+content_margin_top = 4.0
+content_margin_right = 2.0
+content_margin_bottom = 4.0
+
 [resource]
 default_font_size = 11
 Button/colors/font_color = Color(1, 0.98, 0.9, 1)
@@ -96,5 +130,20 @@ Button/styles/disabled = SubResource("StyleBoxTexture_btn_d")
 Button/styles/focus = SubResource("StyleBoxEmpty_focus")
 Label/colors/font_color = Color(0.23, 0.165, 0.125, 1)
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_panel")
+CheckButton/colors/font_color = Color(0.23, 0.165, 0.125, 1)
+CheckButton/colors/font_hover_color = Color(0.23, 0.165, 0.125, 1)
+CheckButton/colors/font_pressed_color = Color(0.29, 0.45, 0.24, 1)
+CheckButton/colors/font_hover_pressed_color = Color(0.29, 0.45, 0.24, 1)
+CheckButton/colors/font_focus_color = Color(0.23, 0.165, 0.125, 1)
+CheckButton/constants/outline_size = 0
+CheckButton/font_sizes/font_size = 11
+CheckButton/styles/normal = SubResource("StyleBoxEmpty_check")
+CheckButton/styles/hover = SubResource("StyleBoxEmpty_check")
+CheckButton/styles/pressed = SubResource("StyleBoxEmpty_check")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxEmpty_check")
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_check")
+HSlider/styles/slider = SubResource("StyleBoxFlat_slider")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fill")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_bar_bg")
 ProgressBar/styles/fill = SubResource("StyleBoxFlat_bar_fill")
