@@ -86,6 +86,13 @@ save.json   строка 1: {"format_version":2,"game_version":"0.3.0","saved_at
 История форматов: v0 — прототип (плоский словарь), v1 — 0.2.0, v2 — 0.3.0 (+ `goals`).
 Настройки хранятся отдельно (`settings.cfg`) и не сбрасываются вместе с прогрессом.
 
+## Лаборатория разработчика (`scripts/dev/dev_lab.gd`)
+`enter()`: сохранить игру → снимок `SaveManager.build_save_data()` → `SaveManager.suspended`
+→ часы `OffsetTimeSource` поверх текущего источника → песочница (своя FarmState из
+`resources/rooms/dev_lab.tres`). `exit()`: вернуть источник времени и применить снимок.
+Читы — статические функции `DevLab`, UI — `DevPanel`. Если приложение убить в лаборатории,
+при запуске загрузится реальное сохранение, записанное в `enter()`.
+
 ## Звук
 `SoundPlayer` — не autoload, а узел главной сцены: он только подписывается на сигналы
 (`FarmState`, `EconomyManager`, `ProgressionManager`, `Hud`, `FarmRoom`) и на каждую кнопку

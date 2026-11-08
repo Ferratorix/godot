@@ -13,6 +13,9 @@ extends Resource
 @export var rug_rect: Rect2i = Rect2i()
 @export var rug_tile: Vector2i = Vector2i(2, 0)
 @export var initial_objects: Array[RoomObjectPlacement] = []
+## Visual tint of floor and walls (e.g. the cool Developer Lab look).
+@export var floor_tint: Color = Color.WHITE
+@export var wall_tint: Color = Color.WHITE
 ## Border cells whose back-RIGHT wall segment carries a window.
 @export var window_cells: Array[Vector2i] = []
 ## Border cells whose back-LEFT wall segment carries a poster.

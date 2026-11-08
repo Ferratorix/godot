@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="RoomLayoutData" load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/room_layout_data.gd" id="1_layout"]
+[ext_resource type="Script" path="res://scripts/data/room_object_placement.gd" id="2_place"]
+[ext_resource type="Resource" path="res://resources/placeables/hydro_rack_advanced.tres" id="3_hydro_rack_advanced"]
+[ext_resource type="Resource" path="res://resources/placeables/hydro_rack_basic.tres" id="4_hydro_rack_basic"]
+[ext_resource type="Resource" path="res://resources/placeables/shipping_box.tres" id="5_shipping_box"]
+[ext_resource type="Resource" path="res://resources/placeables/storage_crate.tres" id="6_storage_crate"]
+[ext_resource type="Resource" path="res://resources/placeables/work_table.tres" id="7_work_table"]
+
+[sub_resource type="Resource" id="P_0"]
+script = ExtResource("2_place")
+placeable = ExtResource("3_hydro_rack_advanced")
+cell = Vector2i(1, 1)
+
+[sub_resource type="Resource" id="P_1"]
+script = ExtResource("2_place")
+placeable = ExtResource("3_hydro_rack_advanced")
+cell = Vector2i(3, 1)
+
+[sub_resource type="Resource" id="P_2"]
+script = ExtResource("2_place")
+placeable = ExtResource("3_hydro_rack_advanced")
+cell = Vector2i(5, 1)
+
+[sub_resource type="Resource" id="P_3"]
+script = ExtResource("2_place")
+placeable = ExtResource("4_hydro_rack_basic")
+cell = Vector2i(1, 4)
+
+[sub_resource type="Resource" id="P_4"]
+script = ExtResource("2_place")
+placeable = ExtResource("4_hydro_rack_basic")
+cell = Vector2i(3, 4)
+
+[sub_resource type="Resource" id="P_5"]
+script = ExtResource("2_place")
+placeable = ExtResource("7_work_table")
+cell = Vector2i(7, 1)
+
+[sub_resource type="Resource" id="P_6"]
+script = ExtResource("2_place")
+placeable = ExtResource("6_storage_crate")
+cell = Vector2i(0, 6)
+
+[sub_resource type="Resource" id="P_7"]
+script = ExtResource("2_place")
+placeable = ExtResource("5_shipping_box")
+cell = Vector2i(8, 6)
+
+[resource]
+script = ExtResource("1_layout")
+id = &"dev_lab"
+name_key = "ROOM_DEV_LAB"
+size = Vector2i(9, 7)
+floor_tiles = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0)])
+initial_objects = Array[ExtResource("2_place")]([SubResource("P_0"), SubResource("P_1"), SubResource("P_2"), SubResource("P_3"), SubResource("P_4"), SubResource("P_5"), SubResource("P_6"), SubResource("P_7")])
+floor_tint = Color(0.86, 0.92, 0.97, 1)
+wall_tint = Color(0.7, 0.8, 0.95, 1)

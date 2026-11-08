@@ -560,3 +560,78 @@ msgstr "goal reward"
 
 msgid "UI_SETTINGS_SAVED_NOTE"
 msgstr "Settings are stored separately from progress."
+
+msgid "ROOM_DEV_LAB"
+msgstr "Developer Lab"
+
+msgid "UI_STAGE_DEV_LAB"
+msgstr "Lab (sandbox)"
+
+msgid "UI_ENTER_LAB"
+msgstr "Developer Lab"
+
+msgid "UI_EXIT_LAB"
+msgstr "Home"
+
+msgid "UI_DEV_PANEL"
+msgstr "DEV"
+
+msgid "UI_DEV_UNLOCKED"
+msgstr "Developer mode enabled"
+
+msgid "DEV_INFO_FMT"
+msgstr "Sandbox: nothing is saved. Time offset: %s · ripe: %d · free slots: %d"
+
+msgid "DEV_GROW_ALL"
+msgstr "Grow all"
+
+msgid "DEV_PLANT_ALL"
+msgstr "Plant all"
+
+msgid "DEV_HARVEST_ALL"
+msgstr "Harvest all"
+
+msgid "DEV_SKIP_1M"
+msgstr "+1 min"
+
+msgid "DEV_SKIP_10M"
+msgstr "+10 min"
+
+msgid "DEV_SKIP_1H"
+msgstr "+1 hour"
+
+msgid "DEV_SKIP_1D"
+msgstr "+1 day"
+
+msgid "DEV_COINS"
+msgstr "+10,000 coins"
+
+msgid "DEV_LEVEL"
+msgstr "+1 level"
+
+msgid "DEV_MAX_LEVEL"
+msgstr "Max level"
+
+msgid "DEV_SEEDS"
+msgstr "Seeds ×10"
+
+msgid "DEV_ALL_EQUIPMENT"
+msgstr "All equipment"
+
+msgid "DEV_RESET_LAB"
+msgstr "Reset lab"
+
+msgid "DEV_DONE"
+msgstr "Done"
+
+msgid "DEV_DONE_GROWN_FMT"
+msgstr "Grown instantly: %d"
+
+msgid "DEV_DONE_PLANTED_FMT"
+msgstr "Planted: %d"
+
+msgid "DEV_DONE_HARVESTED_FMT"
+msgstr "Harvested product types: %d"
+
+msgid "DEV_DONE_SKIPPED_FMT"
+msgstr "Time skipped by %s"

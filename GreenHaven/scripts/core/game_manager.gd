@@ -107,6 +107,14 @@ func set_farm(new_farm: FarmState, saved_at: float) -> void:
 		welcome_back.emit(maxf(0.0, now - saved_at), farm.count_ready_between(saved_at, now))
 
 
+## Room layout a farm is built from (home, Developer Lab, later greenhouse).
+func layout_for(farm_state: FarmState) -> RoomLayoutData:
+	var path := "res://resources/rooms/%s.tres" % farm_state.layout_id
+	if farm_state.layout_id != &"" and ResourceLoader.exists(path):
+		return load(path)
+	return load(START_LAYOUT_PATH)
+
+
 ## Activates a goal tracker (new game or loaded save).
 func set_goals(new_goals: GoalTracker) -> void:
 	if goals and goals.state_changed.is_connected(SaveManager.mark_dirty):

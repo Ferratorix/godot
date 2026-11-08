@@ -211,3 +211,25 @@ func test_sounds_follow_game_events() -> void:
 	check_eq(sound.last_played, &"coins")
 	main.hud.open_panel(main.hud.shop_panel)
 	check_eq(sound.last_played, &"panel")
+
+
+func test_lab_through_ui() -> void:
+	var hud: Hud = main.hud
+	hud.open_panel(hud.settings_panel)
+	await frames(1)
+	_button(hud.settings_panel, "UI_ENTER_LAB").pressed.emit()  # Debug build: available.
+	await frames(2)
+	check(DevLab.is_active())
+	check_eq(main.world.room.layout.id, &"dev_lab", "lab room shown")
+	check(_button(hud, "UI_DEV_PANEL") != null, "DEV button visible")
+	hud.open_panel(hud.dev_panel)
+	await frames(1)
+	_button(hud.dev_panel, "DEV_PLANT_ALL").pressed.emit()
+	_button(hud.dev_panel, "DEV_GROW_ALL").pressed.emit()
+	check_eq(GameManager.farm.count_ready(), 24)
+	hud.close_panel()
+	_button(hud, "UI_EXIT_LAB").pressed.emit()
+	await frames(2)
+	check(not DevLab.is_active())
+	check_eq(main.world.room.layout.id, &"home_garden_room", "back home")
+	check(_button(hud, "UI_DEV_PANEL") == null, "DEV button hidden at home")

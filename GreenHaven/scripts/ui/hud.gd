@@ -34,6 +34,9 @@ var storage_panel: StoragePanel
 var skills_panel: SkillsPanel
 var seed_picker: SeedPickerPanel
 var settings_panel: SettingsPanel
+var dev_panel: DevPanel
+var _dev_button: Button
+var _exit_lab_button: Button
 var _goals: GoalTracker
 var _shown_coins: float = 0.0
 var _coins_tween: Tween
@@ -105,13 +108,22 @@ func _create_panels() -> void:
 	skills_panel = SkillsPanel.new()
 	seed_picker = SeedPickerPanel.new()
 	settings_panel = SettingsPanel.new()
-	for p: GamePanel in [shop_panel, storage_panel, skills_panel, seed_picker, settings_panel]:
+	dev_panel = DevPanel.new()
+	for p: GamePanel in [shop_panel, storage_panel, skills_panel, seed_picker, settings_panel, dev_panel]:
 		p.visible = false
 		p.closed.connect(_on_panel_closed.bind(p))
 		%Center.add_child(p)
 		if p.has_signal("message"):
 			p.connect("message", show_toast)  # (text, is_error)
 	seed_picker.shop_requested.connect(func() -> void: open_panel(shop_panel))
+	# Developer Lab controls (shown only inside the lab).
+	_dev_button = UiKit.button("UI_DEV_PANEL", func() -> void: open_panel(dev_panel), 70)
+	_exit_lab_button = UiKit.button("UI_EXIT_LAB", DevLab.exit, 90)
+	for b: Button in [_dev_button, _exit_lab_button]:
+		b.custom_minimum_size.y = 40
+		b.visible = false
+		$MenuButtons.add_child(b)
+	_dev_button.self_modulate = Color(0.75, 0.85, 1.25)
 
 
 func open_panel(panel: GamePanel) -> void:
@@ -236,6 +248,8 @@ func _update_goal_card() -> void:
 
 
 func _on_level_up(new_level: int) -> void:
+	if DevLab.quiet:
+		return
 	show_toast(tr("UI_LEVEL_UP_FMT") % new_level)
 
 
@@ -251,6 +265,10 @@ func _bind_farm(farm: FarmState) -> void:
 		_farm.slot_changed.disconnect(_on_slot_changed)
 		_farm.equipment_changed.disconnect(_on_state_changed)
 	_farm = farm
+	var in_lab := DevLab.is_active()
+	_dev_button.visible = in_lab
+	_exit_lab_button.visible = in_lab
+	$TopPanel/VBox/Stage.text = "UI_STAGE_DEV_LAB" if in_lab else "UI_STAGE_HOME_GARDEN"
 	_farm.slot_changed.connect(_on_slot_changed)
 	_farm.equipment_changed.connect(_on_state_changed)
 	hide_object()

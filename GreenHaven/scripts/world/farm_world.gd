@@ -48,8 +48,12 @@ func _ready() -> void:
 
 func _bind_farm(farm: FarmState) -> void:
 	cancel_move_mode()
-	room.build(room.layout, farm)
+	var layout := GameManager.layout_for(farm)
+	var room_changed := layout != room.layout
+	room.build(layout, farm)
 	selection_changed.emit(null)
+	if room_changed and is_node_ready():
+		_setup_camera()
 
 
 func _process(delta: float) -> void:

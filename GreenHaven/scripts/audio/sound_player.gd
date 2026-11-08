@@ -46,7 +46,9 @@ func _ready() -> void:
 		_on_node_added(b)
 	EconomyManager.item_sold.connect(func(_i: StringName, _n: int, _r: int) -> void: play(&"coins"))
 	EconomyManager.item_bought.connect(func(_i: StringName, _n: int, _c: int) -> void: play(&"buy"))
-	ProgressionManager.level_up.connect(func(_l: int) -> void: play(&"level_up"))
+	ProgressionManager.level_up.connect(func(_l: int) -> void:
+		if not DevLab.quiet:
+			play(&"level_up"))
 	GameManager.farm_replaced.connect(_bind_farm)
 	if GameManager.farm:
 		_bind_farm(GameManager.farm)

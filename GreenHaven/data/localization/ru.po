@@ -560,3 +560,78 @@ msgstr "награда за задание"
 
 msgid "UI_SETTINGS_SAVED_NOTE"
 msgstr "Настройки хранятся отдельно от прогресса."
+
+msgid "ROOM_DEV_LAB"
+msgstr "Лаборатория разработчика"
+
+msgid "UI_STAGE_DEV_LAB"
+msgstr "Лаборатория (песочница)"
+
+msgid "UI_ENTER_LAB"
+msgstr "Лаборатория разработчика"
+
+msgid "UI_EXIT_LAB"
+msgstr "Домой"
+
+msgid "UI_DEV_PANEL"
+msgstr "DEV"
+
+msgid "UI_DEV_UNLOCKED"
+msgstr "Режим разработчика включён"
+
+msgid "DEV_INFO_FMT"
+msgstr "Песочница: ничего не сохраняется. Сдвиг времени: %s · созрело: %d · свободных мест: %d"
+
+msgid "DEV_GROW_ALL"
+msgstr "Вырастить всё"
+
+msgid "DEV_PLANT_ALL"
+msgstr "Засадить всё"
+
+msgid "DEV_HARVEST_ALL"
+msgstr "Собрать всё"
+
+msgid "DEV_SKIP_1M"
+msgstr "+1 мин"
+
+msgid "DEV_SKIP_10M"
+msgstr "+10 мин"
+
+msgid "DEV_SKIP_1H"
+msgstr "+1 час"
+
+msgid "DEV_SKIP_1D"
+msgstr "+1 день"
+
+msgid "DEV_COINS"
+msgstr "+10 000 монет"
+
+msgid "DEV_LEVEL"
+msgstr "+1 уровень"
+
+msgid "DEV_MAX_LEVEL"
+msgstr "Макс. уровень"
+
+msgid "DEV_SEEDS"
+msgstr "Семена ×10"
+
+msgid "DEV_ALL_EQUIPMENT"
+msgstr "Всё оборудование"
+
+msgid "DEV_RESET_LAB"
+msgstr "Сбросить лабораторию"
+
+msgid "DEV_DONE"
+msgstr "Готово"
+
+msgid "DEV_DONE_GROWN_FMT"
+msgstr "Выращено мгновенно: %d"
+
+msgid "DEV_DONE_PLANTED_FMT"
+msgstr "Посажено: %d"
+
+msgid "DEV_DONE_HARVESTED_FMT"
+msgstr "Собрано видов урожая: %d"
+
+msgid "DEV_DONE_SKIPPED_FMT"
+msgstr "Время сдвинуто на %s"

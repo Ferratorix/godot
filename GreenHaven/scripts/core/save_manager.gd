@@ -32,6 +32,8 @@ var autosave_enabled: bool = true
 ## Set when the save on disk is from a newer format: we must not overwrite it.
 var blocked_by_newer_save: bool = false
 var last_saved_at: float = 0.0
+## True while the Developer Lab sandbox runs: nothing is written to disk.
+var suspended: bool = false
 
 var _autosave_timer: Timer
 var _dirty: bool = false
@@ -57,7 +59,7 @@ func _ready() -> void:
 
 ## Called by every state change (managers, farm). Schedules an autosave.
 func mark_dirty() -> void:
-	if _suspend_tracking:
+	if _suspend_tracking or suspended:
 		return
 	_dirty = true
 	if autosave_enabled and is_inside_tree():
@@ -94,6 +96,8 @@ func build_save_data() -> Dictionary:
 
 
 func save_game() -> bool:
+	if suspended:
+		return false
 	if blocked_by_newer_save:
 		push_warning("SaveManager: save from a newer version on disk; not overwriting.")
 		saved.emit(false)

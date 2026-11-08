@@ -15,6 +15,8 @@ static var locale: String = "ru"
 static var sfx_volume: float = 0.8
 static var music_volume: float = 0.5
 static var battery_saver: bool = false
+## Unlocks the Developer Lab entry in release builds (5 taps on the version).
+static var dev_mode: bool = false
 
 
 static func reset_to_defaults() -> void:
@@ -22,6 +24,7 @@ static func reset_to_defaults() -> void:
 	sfx_volume = 0.8
 	music_volume = 0.5
 	battery_saver = false
+	dev_mode = false
 
 
 ## Loads settings (missing/invalid values fall back to defaults).
@@ -37,6 +40,8 @@ static func load_settings() -> void:
 	music_volume = _volume(cfg.get_value("audio", "music", music_volume), music_volume)
 	var saver: Variant = cfg.get_value("performance", "battery_saver", battery_saver)
 	battery_saver = saver if saver is bool else false
+	var dev: Variant = cfg.get_value("developer", "dev_mode", false)
+	dev_mode = dev if dev is bool else false
 
 
 static func save_settings() -> bool:
@@ -45,10 +50,16 @@ static func save_settings() -> bool:
 	cfg.set_value("audio", "sfx", sfx_volume)
 	cfg.set_value("audio", "music", music_volume)
 	cfg.set_value("performance", "battery_saver", battery_saver)
+	cfg.set_value("developer", "dev_mode", dev_mode)
 	return cfg.save(path) == OK
 
 
 ## Pushes the settings into the engine (language, audio buses, frame cap).
+## Lab is always available in debug builds (e.g. the CI debug APK).
+static func is_dev_available() -> bool:
+	return dev_mode or OS.is_debug_build()
+
+
 static func apply() -> void:
 	TranslationServer.set_locale(locale)
 	_apply_bus(BUS_SFX, sfx_volume)

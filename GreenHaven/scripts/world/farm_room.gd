@@ -74,6 +74,8 @@ func build(room_layout: RoomLayoutData, farm_state: FarmState = null) -> void:
 	grid = farm.placement
 	_build_floor()
 	_build_walls()
+	floor_layer.modulate = layout.floor_tint
+	walls.modulate = layout.wall_tint
 	for key in grid.get_keys():
 		_on_object_added(key)
 	refresh_all_plants()

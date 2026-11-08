@@ -37,6 +37,8 @@ func run(tree: SceneTree, args: Dictionary) -> void:
 		hud.open_panel(panel)
 		if args.has("tab"):
 			panel.select_tab(int(args.tab))
+	if args.has("lab"):
+		await lab(main, tree, args.lab == "panel")
 	if args.has("toast"):
 		main.hud.show_toast(args.toast)
 
@@ -71,3 +73,14 @@ func _demo_farm() -> void:
 			p.ready_at -= shift
 			farm.slots[key][i] = p
 			n += 1
+
+
+## "lab" arg: enter the Developer Lab, plant + half-grow, open DEV panel.
+func lab(main: Node, tree: SceneTree, open_panel: bool) -> void:
+	DevLab.enter()
+	DevLab.plant_everything()
+	DevLab.skip_time(1500.0)
+	for i in 3:
+		await tree.process_frame
+	if open_panel:
+		main.hud.open_panel(main.hud.dev_panel)

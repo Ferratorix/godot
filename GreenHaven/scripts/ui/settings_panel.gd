@@ -8,6 +8,7 @@ signal message(text: String, is_error: bool)
 const RESET_CONFIRM_SEC: float = 3.0
 
 var _reset_armed_until: float = 0.0
+var _version_taps: int = 0
 
 
 func _init() -> void:
@@ -46,9 +47,32 @@ func refresh() -> void:
 	var reset := UiKit.button(reset_text, _on_reset_pressed, 180)
 	_style_as_warning(reset)
 	content.add_child(reset)
+	if GameSettings.is_dev_available() and not DevLab.is_active():
+		content.add_child(UiKit.separator())
+		content.add_child(UiKit.button("UI_ENTER_LAB", _enter_lab, 180))
 	content.add_child(UiKit.label("UI_SETTINGS_SAVED_NOTE", 9, UiKit.MUTED_COLOR, true))
-	content.add_child(UiKit.label(tr("UI_VERSION_FMT") % ProjectSettings.get_setting(
-		"application/config/version", "?"), 9, UiKit.MUTED_COLOR))
+	var version := UiKit.label(tr("UI_VERSION_FMT") % ProjectSettings.get_setting(
+		"application/config/version", "?"), 9, UiKit.MUTED_COLOR)
+	version.mouse_filter = Control.MOUSE_FILTER_STOP
+	version.gui_input.connect(_on_version_input)
+	content.add_child(version)
+
+
+func _enter_lab() -> void:
+	close()
+	DevLab.enter()
+
+
+## 5 taps on the version line unlock developer mode (like Android).
+func _on_version_input(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton and event.pressed):
+		return
+	_version_taps += 1
+	if _version_taps >= 5 and not GameSettings.dev_mode:
+		GameSettings.dev_mode = true
+		GameSettings.save_settings()
+		message.emit(tr("UI_DEV_UNLOCKED"), false)
+		refresh()
 
 
 ## Terracotta button for destructive actions.
