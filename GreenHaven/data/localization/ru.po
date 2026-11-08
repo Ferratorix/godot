@@ -1,0 +1,91 @@
+# Green Haven — ru translation. Keys (msgid) are stable identifiers.
+msgid ""
+msgstr ""
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "UI_GAME_TITLE"
+msgstr "Green Haven"
+
+msgid "UI_STAGE_HOME_GARDEN"
+msgstr "Этап 1 · Домашний сад"
+
+msgid "UI_ZOOM_IN"
+msgstr "Приблизить"
+
+msgid "UI_ZOOM_OUT"
+msgstr "Отдалить"
+
+msgid "UI_RECENTER"
+msgstr "Показать всю комнату"
+
+msgid "UI_HINT_CONTROLS"
+msgstr "Нажмите на предмет, чтобы выбрать. Удерживайте, чтобы переместить. Двумя пальцами — масштаб."
+
+msgid "UI_MOVE_MODE_HINT"
+msgstr "Нажмите на свободную клетку, куда поставить предмет"
+
+msgid "UI_CANCEL"
+msgstr "Отмена"
+
+msgid "UI_CLOSE"
+msgstr "Закрыть"
+
+msgid "UI_MOVE"
+msgstr "Переместить"
+
+msgid "UI_CELL_FMT"
+msgstr "Клетка: %d, %d"
+
+msgid "ROOM_HOME_GARDEN"
+msgstr "Домашняя ферма"
+
+msgid "CATEGORY_FURNITURE"
+msgstr "Мебель"
+
+msgid "CATEGORY_DECOR"
+msgstr "Декор"
+
+msgid "CATEGORY_PRODUCTION"
+msgstr "Производство"
+
+msgid "CATEGORY_STORAGE"
+msgstr "Хранение"
+
+msgid "CATEGORY_TRADE"
+msgstr "Торговля"
+
+msgid "CATEGORY_EQUIPMENT"
+msgstr "Оборудование"
+
+msgid "OBJ_HYDRO_RACK_NAME"
+msgstr "Гидропонный стеллаж"
+
+msgid "OBJ_HYDRO_RACK_DESC"
+msgstr "Три яруса лотков с питательным раствором. Здесь будут расти первые культуры.\n(Посадка появится в версии 0.2)"
+
+msgid "OBJ_STORAGE_CRATE_NAME"
+msgstr "Ящик для хранения"
+
+msgid "OBJ_STORAGE_CRATE_DESC"
+msgstr "Деревянный ящик для семян и урожая.\n(Склад появится в версии 0.4)"
+
+msgid "OBJ_WORK_TABLE_NAME"
+msgstr "Рабочий стол"
+
+msgid "OBJ_WORK_TABLE_DESC"
+msgstr "Место для пересадки рассады и мелкого ремонта."
+
+msgid "OBJ_MONSTERA_NAME"
+msgstr "Монстера"
+
+msgid "OBJ_MONSTERA_DESC"
+msgstr "Комнатное растение. Просто радует глаз."
+
+msgid "OBJ_SHIPPING_BOX_NAME"
+msgstr "Короб для продажи"
+
+msgid "OBJ_SHIPPING_BOX_DESC"
+msgstr "Сюда кладут урожай на продажу.\n(Продажа появится в версии 0.4)"

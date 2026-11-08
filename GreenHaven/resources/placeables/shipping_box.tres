@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlaceableData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/placeable_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/objects/shipping_box.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"shipping_box"
+name_key = "OBJ_SHIPPING_BOX_NAME"
+description_key = "OBJ_SHIPPING_BOX_DESC"
+category = 4
+texture = ExtResource("2_tex")
+texture_anchor = Vector2(16, 28)
+footprint = Vector2i(1, 1)
+movable = true

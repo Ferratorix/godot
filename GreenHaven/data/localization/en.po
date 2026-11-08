@@ -1,0 +1,91 @@
+# Green Haven — en translation. Keys (msgid) are stable identifiers.
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "UI_GAME_TITLE"
+msgstr "Green Haven"
+
+msgid "UI_STAGE_HOME_GARDEN"
+msgstr "Stage 1 · Home Garden"
+
+msgid "UI_ZOOM_IN"
+msgstr "Zoom in"
+
+msgid "UI_ZOOM_OUT"
+msgstr "Zoom out"
+
+msgid "UI_RECENTER"
+msgstr "Show whole room"
+
+msgid "UI_HINT_CONTROLS"
+msgstr "Tap an object to select it. Hold to move it. Pinch to zoom."
+
+msgid "UI_MOVE_MODE_HINT"
+msgstr "Tap a free tile to place the object"
+
+msgid "UI_CANCEL"
+msgstr "Cancel"
+
+msgid "UI_CLOSE"
+msgstr "Close"
+
+msgid "UI_MOVE"
+msgstr "Move"
+
+msgid "UI_CELL_FMT"
+msgstr "Tile: %d, %d"
+
+msgid "ROOM_HOME_GARDEN"
+msgstr "Home farm"
+
+msgid "CATEGORY_FURNITURE"
+msgstr "Furniture"
+
+msgid "CATEGORY_DECOR"
+msgstr "Decor"
+
+msgid "CATEGORY_PRODUCTION"
+msgstr "Production"
+
+msgid "CATEGORY_STORAGE"
+msgstr "Storage"
+
+msgid "CATEGORY_TRADE"
+msgstr "Trade"
+
+msgid "CATEGORY_EQUIPMENT"
+msgstr "Equipment"
+
+msgid "OBJ_HYDRO_RACK_NAME"
+msgstr "Hydroponic rack"
+
+msgid "OBJ_HYDRO_RACK_DESC"
+msgstr "Three tiers of trays with nutrient solution. Your first crops will grow here.\n(Planting arrives in v0.2)"
+
+msgid "OBJ_STORAGE_CRATE_NAME"
+msgstr "Storage crate"
+
+msgid "OBJ_STORAGE_CRATE_DESC"
+msgstr "A wooden crate for seeds and harvest.\n(Storage arrives in v0.4)"
+
+msgid "OBJ_WORK_TABLE_NAME"
+msgstr "Work table"
+
+msgid "OBJ_WORK_TABLE_DESC"
+msgstr "A spot for repotting seedlings and small repairs."
+
+msgid "OBJ_MONSTERA_NAME"
+msgstr "Monstera"
+
+msgid "OBJ_MONSTERA_DESC"
+msgstr "A houseplant. It simply looks nice."
+
+msgid "OBJ_SHIPPING_BOX_NAME"
+msgstr "Shipping box"
+
+msgid "OBJ_SHIPPING_BOX_DESC"
+msgstr "Put harvest here to sell it.\n(Selling arrives in v0.4)"

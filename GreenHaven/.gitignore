@@ -1,0 +1,11 @@
+# Godot 4 generated data
+.godot/
+/android/
+# Export output
+/build/
+*.apk
+*.aab
+# Local keystores must never be committed
+*.keystore
+*.jks
+export_credentials.cfg
