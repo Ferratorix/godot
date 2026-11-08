@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EquipmentData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/icons/equipment_water_tank.png" id="2_icon"]
+[ext_resource type="Resource" path="res://resources/placeables/water_tank.tres" id="3_placeable"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"water_tank"
+name_key = "EQ_WATER_TANK_NAME"
+description_key = "EQ_WATER_TANK_DESC"
+category = 2
+cost = 250
+icon = ExtResource("2_icon")
+unlock_level = 2
+max_count = 1
+requires = &""
+replaces = &""
+growth_time_multiplier = 1.0
+yield_bonus = 0.05
+placeable = ExtResource("3_placeable")

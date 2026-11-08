@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=11 format=3]
+[gd_resource type="Theme" load_steps=13 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/placeholder/ui/panel_wood.png" id="1_panel"]
 [ext_resource type="Texture2D" path="res://assets/placeholder/ui/button_normal.png" id="2_btn_n"]
@@ -63,6 +63,22 @@ content_margin_bottom = 6.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
+bg_color = Color(0.886, 0.804, 0.651, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.408, 0.259, 0.165, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_fill"]
+bg_color = Color(0.435, 0.639, 0.353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.408, 0.259, 0.165, 1)
+
 [resource]
 default_font_size = 11
 Button/colors/font_color = Color(1, 0.98, 0.9, 1)
@@ -80,3 +96,5 @@ Button/styles/disabled = SubResource("StyleBoxTexture_btn_d")
 Button/styles/focus = SubResource("StyleBoxEmpty_focus")
 Label/colors/font_color = Color(0.23, 0.165, 0.125, 1)
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_panel")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_bar_bg")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_bar_fill")

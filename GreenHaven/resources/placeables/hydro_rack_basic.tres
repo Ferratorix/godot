@@ -13,3 +13,6 @@ texture = ExtResource("2_tex")
 texture_anchor = Vector2(16, 52)
 footprint = Vector2i(1, 1)
 movable = true
+grow_slots = 3
+slot_type = 0
+slot_positions = PackedVector2Array(0, -6, 0, -21, 0, -36)

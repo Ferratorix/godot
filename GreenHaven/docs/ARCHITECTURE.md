@@ -10,47 +10,76 @@
 4. **Однонаправленные зависимости** (см. схему); UI и мир не знают друг о друге —
    их соединяет `Main`.
 
-## Схема зависимостей (PHASE 1)
+## Слои и зависимости (v0.2)
 
 ```
-                    ┌──────────── Autoloads ─────────────┐
-                    │ GameManager   TimeManager           │
-                    │   │ lifecycle   │ TimeSource ◄─ System/Manual
-                    └───┼─────────────┼───────────────────┘
-                        │ signals     │ now()
- scenes/main/main.tscn  ▼             ▼
- Main (scripts/main/main.gd) ── wires ──┐
-   ├── FarmWorld (farm_world.gd)        │      ├── UI (CanvasLayer)
-   │     ├── Room: FarmRoom ◄── RoomLayoutData (.tres)
-   │     │     ├── Floor: TileMapLayer (iso, 32×16)       └── Hud (hud.gd)
-   │     │     ├── Walls (Sprite2D slices)                    сигналы намерений:
-   │     │     ├── FloorOverlay: CellHighlight                zoom / move / back
-   │     │     ├── Objects (y_sort) → WorldObject ◄─ PlaceableData
-   │     │     ├── Ambience → WindowLight
-   │     │     └── PlacementGrid (RefCounted, логика занятости)
-   │     ├── Camera: IsoCamera
-   │     └── Gestures: TouchGestureHandler
+ Данные (Resource .tres)      PlantData · ProductData · EquipmentData · PlaceableData
+                              RoomLayoutData · CatalogData (resources/catalog.tres)
+        ▲ GameCatalog (статический кэш, только чтение)
+        │
+ Autoload (состояние)         TimeManager ◄─ TimeSource
+                              InventoryManager      (ни от кого не зависит)
+                              EconomyManager    ──► InventoryManager, GameCatalog
+                              ProgressionManager──► GameCatalog
+                              GameManager       ──► все выше: связывает правила между ними,
+                                                    владеет FarmState, boot/new_game
+                              SaveManager       ──► собирает/применяет состояние всех
+        ▲
+ Модель фермы (RefCounted)    FarmState ─► PlacementGrid, PlantInstance, ProductionModifiers
+                              (вызывает Inventory/Economy/Progression/TimeManager)
+        ▲ сигналы: slot_changed, object_added, equipment_changed, state_changed
+        │
+ Представление (узлы)         FarmWorld ─► FarmRoom ─► WorldObject (растения, LED, маркер)
+                              IsoCamera, TouchGestureHandler
+                              Hud ─► ShopPanel / StoragePanel / SkillsPanel / SeedPickerPanel
+                              Main связывает FarmWorld и Hud
 ```
+
+Правила:
+* Зависимости только сверху вниз по схеме; autoload-ы не знают о сценах.
+* Перекрёстные правила (навык «Торговля» → цена продажи, продажа → опыт) подключает
+  `GameManager._wire_systems()`, поэтому Economy и Progression не ссылаются друг на друга.
+* UI не меняет поля состояния: только вызывает публичные API (`EconomyManager.buy_item`,
+  `FarmState.plant`, `FarmState.purchase_equipment`, `ProgressionManager.upgrade_skill`).
+* Каждая система имеет `get_state()/apply_state()` (или `to_dict()/from_dict()`), а
+  `apply_state` сама очищает некорректные значения.
 
 ## Модули
 
 | Модуль | Файл | Ответственность |
 |---|---|---|
-| GameManager (autoload) | `scripts/core/game_manager.gd` | жизненный цикл (pause/resume/back/quit), локаль, текущий этап |
-| TimeManager (autoload) | `scripts/core/time_manager.gd` | санированное реальное время, защита от отката часов, тик UI раз в секунду |
-| TimeSource и наследники | `scripts/core/*time_source.gd` | источник Unix-времени (системный / ручной для тестов) |
-| PlaceableData | `scripts/data/placeable_data.gd` | описание размещаемого объекта |
-| RoomLayoutData / RoomObjectPlacement | `scripts/data/room_*.gd` | описание комнаты и стартовой расстановки |
-| PlacementGrid | `scripts/world/placement_grid.gd` | занятость клеток, проверка/перемещение, сериализация |
-| FarmRoom | `scripts/world/farm_room.gd` | построение комнаты из данных, координаты, выбор, drag&drop |
-| WorldObject | `scripts/world/world_object.gd` | визуал объекта, анимации выбора/установки, pixel hit-test |
-| CellHighlight | `scripts/world/cell_highlight.gd` | подсветка клеток |
-| WindowLight | `scripts/world/window_light.gd` | декоративный луч света и пылинки |
-| IsoCamera | `scripts/world/iso_camera.gd` | плавная камера, инерция, границы, pixel-perfect zoom |
-| TouchGestureHandler | `scripts/world/touch_gesture_handler.gd` | жесты: tap, long press, pan, pinch, drag; мышь |
-| FarmWorld | `scripts/world/farm_world.gd` | политика взаимодействия: жесты → камера/комната |
-| Hud | `scripts/ui/hud.gd` | интерфейс, сигналы намерений игрока |
-| Main | `scripts/main/main.gd` | связывание мира и UI |
+| GameManager | `scripts/core/game_manager.gd` | жизненный цикл, boot/new_game, текущая FarmState, связывание систем, сводка возвращения |
+| TimeManager | `scripts/core/time_manager.gd` | санированное время, защита от отката, UI-тик |
+| SaveManager | `scripts/core/save_manager.gd` | файлы сохранений, целостность, миграции, автосохранение |
+| InventoryManager | `scripts/economy/inventory_manager.gd` | количества предметов |
+| EconomyManager | `scripts/economy/economy_manager.gd` | монеты, цены, покупки/продажи, журнал |
+| ProgressionManager | `scripts/progression/progression_manager.gd` | опыт, уровни, навыки, открытия |
+| FarmState | `scripts/farming/farm_state.gd` | размещение, посадочные места, посадка/сбор, оборудование, модификаторы |
+| PlantInstance | `scripts/farming/plant_instance.gd` | одна посадка: метки времени, стадия, прогресс |
+| ProductionModifiers | `scripts/farming/production_modifiers.gd` | итоговые множители с лимитами |
+| GameCatalog / *Data | `scripts/data/` | контент и баланс |
+| PlacementGrid | `scripts/world/placement_grid.gd` | занятость клеток, сериализация |
+| FarmRoom / WorldObject | `scripts/world/` | отображение комнаты, объектов и растений; выбор и перетаскивание |
+| IsoCamera / TouchGestureHandler / FarmWorld | `scripts/world/` | камера, жесты, политика взаимодействия |
+| Hud + панели | `scripts/ui/` | интерфейс |
+
+## Рост растений
+* При посадке: `planted_at = now`, `ready_at = now + base × time_multiplier`,
+  `yield = base × (1 + bonus)` — модификаторы берутся **в момент посадки**.
+* Стадия: 4 равных отрезка роста (семя → прорастание → молодое → взрослое), «созревшее»
+  только при `now ≥ ready_at`. Ничего не тикает — всё вычисляется по запросу.
+* Сбор сначала очищает место, затем выдаёт урожай → повторный сбор невозможен.
+* Дробная часть бонуса урожая копится по продукту (`yield_carry`).
+
+## Сохранения
+```
+save.json   строка 1: {"format_version":1,"game_version":"0.2.0","saved_at":…,"checksum":"<sha256 строки 2>"}
+            строка 2: {"time":{…},"progression":{…},"inventory":{…},"economy":{…},"farm":{…}}
+```
+Запись: `save.tmp` → проверка чтением → `save.json` переименовывается в `save.bak` →
+`save.tmp` → `save.json`. Загрузка: `save.json` → `save.tmp` → `save.bak` → новая игра.
+Повреждённый основной файл сохраняется как `save.corrupt`. Новая версия формата добавляется
+шагом в `SaveManager._migrate()`.
 
 ## Ключевые правила
 
@@ -79,18 +108,15 @@
 * Состояние процессов хранится метками начала/окончания и вычисляется по запросу.
 * Параметры цикла фиксируются при старте цикла.
 
-## Планируемые модули (не реализованы)
+## Планируемые модули (следующие этапы)
 
-| Фаза | Модуль | Тип | Связь |
-|---|---|---|---|
-| 2 | `PlantData`, `PlantInstance`, `GrowSlot` | Resource / RefCounted | `TimeManager` |
-| 4 | `EconomyManager` | autoload | единственная точка изменения баланса |
-| 4 | `InventoryManager` | autoload | склад, сигнал `item_changed` |
-| 4 | `EquipmentData` + модификаторы | Resource | влияет на новые циклы `PlantInstance` |
-| 5 | `ProgressionManager` | autoload | XP, уровни, навыки, открытия |
-| 6 | `SaveManager` | autoload | JSON, версии, миграции, бэкап, атомарная запись |
+| Этап | Модуль | Связь |
+|---|---|---|
+| 2 «Умная гидропоника» | ветка «Технологии», автоматический сбор | `FarmState`, `ProgressionManager` |
+| 3 «Теплица» | второй `RoomLayoutData`, переход между локациями, `SlotType.GREENHOUSE/SOIL` | `GameManager` хранит несколько FarmState |
+| 4+ | рынок/спрос (`EconomyManager.get_sell_price`), контракты, переработка (`ProductData`) | — |
 
-Autoload добавляются только по мере реальной реализации — пустых заглушек нет.
+Все 6 запланированных Autoload реализованы. Новые добавляются только при реальной необходимости.
 
 ## Структура каталогов
 

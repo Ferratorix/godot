@@ -250,34 +250,285 @@ def object_canvas(height: int) -> tuple[Image.Image, int, int]:
     return img, TILE_W // 2, height - TILE_H // 2
 
 
-def hydro_rack() -> Image.Image:
+SUBSTRATE = (92, 74, 58, 255)
+SUBSTRATE_HI = (120, 98, 76, 255)
+RACK_SHELF_Z = (4, 19, 34)
+
+
+def hydro_rack(advanced: bool = False) -> Image.Image:
+    """Rack with EMPTY trays: plants are separate sprites (PlantVisual)."""
     img, cx, by = object_canvas(60)
     d = ImageDraw.Draw(img)
     hw, hh = 14, 7
     post_h = 46
-    # Back post (mostly hidden) then shelves, then front posts.
-    d.line([(cx, by - hh - post_h), (cx, by - hh)], fill=METAL_DEEP)
-    for level, z in enumerate((4, 19, 34)):
-        iso_box(img, cx, by - z, hw, hh, 2, METAL, METAL_DARK, METAL_DEEP)
-        # Tray of greens on the shelf.
-        sy = by - z - 4
-        for k, (ox, oy) in enumerate(((-7, 0), (-2, -2), (3, 0), (7, 1), (0, 2), (-4, 2), (5, -2))):
-            col = (LEAF_DEEP, LEAF, LEAF_HI) if (k + level) % 3 else (LEAF_DEEP, LEAF_DARK, LEAF)
-            blob(img, cx + ox, sy + oy, 2, col)
-        # LED strip under the shelf above.
+    frame = (LEAF_DARK, LEAF_DEEP, OUTLINE) if advanced else (METAL_DEEP, METAL_DEEP, OUTLINE)
+    shelf = (METAL_HI, METAL, METAL_DARK) if advanced else (METAL, METAL_DARK, METAL_DEEP)
+    d.line([(cx, by - hh - post_h), (cx, by - hh)], fill=frame[0])
+    for level, z in enumerate(RACK_SHELF_Z):
+        iso_box(img, cx, by - z, hw, hh, 2, *shelf)
+        # Tray with dark substrate / nutrient film.
+        ty = by - z - 2
+        d.polygon(diamond_points(cx, ty, hw - 3, hh - 2), fill=SUBSTRATE)
+        d.line([(cx - hw + 4, ty), (cx, ty - hh + 3)], fill=SUBSTRATE_HI)
+        if advanced:
+            d.line([(cx - hw + 3, ty + 1), (cx, ty + hh - 1)], fill=WATER)
         if level < 2:
             led_y = by - (z + 15)
             d.line([(cx - hw + 3, led_y + 1), (cx, led_y + hh - 2)], fill=LED)
             d.line([(cx, led_y + hh - 2), (cx + hw - 3, led_y + 1)], fill=LED)
     for x in (cx - hw, cx + hw):
-        d.line([(x, by - post_h), (x, by)], fill=METAL_DEEP)
+        d.line([(x, by - post_h), (x, by)], fill=frame[1])
         d.point((x, by - post_h), fill=METAL_HI)
-    d.line([(cx, by + hh - post_h), (cx, by + hh)], fill=OUTLINE)
+    d.line([(cx, by + hh - post_h), (cx, by + hh)], fill=frame[2])
     d.line([(cx + 1, by + hh - post_h), (cx + 1, by + hh)], fill=METAL_HI)
-    # Top cap with LED lamp.
     iso_box(img, cx, by - post_h, hw, hh, 2, METAL_HI, METAL, METAL_DARK)
     d.line([(cx - hw + 3, by - post_h + 1), (cx, by - post_h + hh - 2)], fill=LED)
     d.line([(cx, by - post_h + hh - 2), (cx + hw - 3, by - post_h + 1)], fill=LED)
+    if advanced:
+        # Small control box with a green status light on the right post.
+        d.rectangle([cx + hw - 4, by - 30, cx + hw, by - 24], fill=METAL_HI, outline=OUTLINE)
+        d.point((cx + hw - 2, by - 28), fill=LEAF_HI)
+    return img
+
+
+def water_tank() -> Image.Image:
+    img, cx, by = object_canvas(40)
+    d = ImageDraw.Draw(img)
+    d.ellipse([cx - 9, by - 6, cx + 9, by + 4], fill=(70, 120, 150, 255))
+    d.rectangle([cx - 9, by - 24, cx + 9, by - 1], fill=WATER)
+    d.rectangle([cx - 9, by - 24, cx - 6, by - 1], fill=(150, 205, 230, 255))
+    d.rectangle([cx + 5, by - 24, cx + 9, by - 1], fill=(92, 150, 186, 255))
+    d.line([(cx - 9, by - 24), (cx - 9, by - 1)], fill=OUTLINE)
+    d.line([(cx + 9, by - 24), (cx + 9, by - 1)], fill=OUTLINE)
+    d.arc([cx - 9, by - 6, cx + 9, by + 4], 0, 180, fill=OUTLINE)
+    d.ellipse([cx - 9, by - 29, cx + 9, by - 19], fill=(196, 230, 242, 255), outline=OUTLINE)
+    d.ellipse([cx - 3, by - 26, cx + 3, by - 22], fill=METAL_DARK)
+    for y in (by - 17, by - 9):
+        d.line([(cx - 8, y), (cx + 8, y)], fill=(80, 128, 164, 255))
+    return img
+
+
+def nutrient_system() -> Image.Image:
+    img, cx, by = object_canvas(44)
+    iso_box(img, cx, by, 12, 6, 14, METAL_HI, METAL, METAL_DARK)
+    d = ImageDraw.Draw(img)
+    # Three nutrient bottles A/B/C on top + tube.
+    for ox, col in ((-6, (214, 120, 84, 255)), (0, LEAF), (6, (232, 196, 90, 255))):
+        x = cx + ox
+        y = by - 14 - 2 + (ox // 3)
+        d.rectangle([x - 2, y - 9, x + 2, y], fill=col, outline=OUTLINE)
+        d.rectangle([x - 1, y - 11, x + 1, y - 9], fill=METAL_DARK)
+    d.rectangle([cx - 8, by - 9, cx - 3, by - 5], fill=(60, 70, 64, 255))
+    d.point((cx - 6, by - 7), fill=LEAF_HI)
+    return img
+
+
+def ph_control() -> Image.Image:
+    img, cx, by = object_canvas(40)
+    iso_box(img, cx, by, 9, 4, 20, METAL, METAL_DARK, METAL_DEEP)
+    d = ImageDraw.Draw(img)
+    # Display on the left face.
+    d.polygon([(cx - 7, by - 16), (cx - 2, by - 14), (cx - 2, by - 9), (cx - 7, by - 11)], fill=(40, 60, 50, 255))
+    d.line([(cx - 6, by - 13), (cx - 3, by - 12)], fill=LEAF_HI)
+    # Probe cable.
+    d.line([(cx + 5, by - 20), (cx + 8, by - 26), (cx + 11, by - 24)], fill=OUTLINE)
+    d.point((cx + 2, by - 6), fill=(232, 120, 90, 255))
+    return img
+
+
+def auto_watering() -> Image.Image:
+    img, cx, by = object_canvas(36)
+    iso_box(img, cx, by, 8, 4, 8, (110, 160, 200, 255), (80, 128, 164, 255), (64, 104, 140, 255))
+    d = ImageDraw.Draw(img)
+    # Pump motor + pipe going up.
+    d.ellipse([cx - 4, by - 16, cx + 4, by - 8], fill=METAL, outline=OUTLINE)
+    d.line([(cx + 4, by - 12), (cx + 10, by - 12), (cx + 10, by - 26)], fill=METAL_DARK, width=2)
+    d.point((cx + 10, by - 27), fill=WATER)
+    d.point((cx, by - 12), fill=LEAF_HI)
+    return img
+
+
+# --- Plants (5 growth stages, 12x14 each) ------------------------------------
+PLANT_W, PLANT_H = 12, 14
+SEED = (204, 170, 112, 255)
+
+# crop id -> (leaf dark, leaf mid, leaf hi, accent, style)
+CROPS = {
+    "microgreens": ((70, 130, 60, 255), (128, 186, 92, 255), (180, 222, 132, 255), (232, 240, 200, 255), "carpet"),
+    "lettuce": ((88, 150, 66, 255), (146, 200, 98, 255), (196, 232, 140, 255), (196, 232, 140, 255), "rosette"),
+    "basil": ((46, 104, 50, 255), (76, 144, 70, 255), (120, 182, 98, 255), (120, 182, 98, 255), "upright"),
+    "spinach": ((38, 92, 48, 255), (58, 122, 62, 255), (96, 158, 86, 255), (96, 158, 86, 255), "broad"),
+    "arugula": ((80, 128, 52, 255), (122, 164, 70, 255), (170, 200, 104, 255), (170, 200, 104, 255), "lobed"),
+    "radish": ((62, 120, 58, 255), (98, 158, 78, 255), (146, 196, 112, 255), (220, 74, 104, 255), "root"),
+    "strawberry": ((52, 112, 56, 255), (84, 150, 72, 255), (130, 186, 100, 255), (226, 60, 64, 255), "berry"),
+    "tomato": ((56, 110, 52, 255), (90, 148, 70, 255), (134, 184, 96, 255), (232, 82, 58, 255), "vine"),
+}
+
+
+def _leaf(d: ImageDraw.ImageDraw, x: int, y: int, w: int, h: int, c, hi) -> None:
+    d.ellipse([x - w, y - h, x + w, y + h], fill=c)
+    if w > 1:
+        d.point((x - w + 1, y - h + 1 if h > 1 else y), fill=hi)
+
+
+def plant_stage(crop: str, stage: int) -> Image.Image:
+    dark, mid, hi, accent, style = CROPS[crop]
+    img = new_image(PLANT_W, PLANT_H)
+    d = ImageDraw.Draw(img)
+    base = PLANT_H - 2  # soil line
+    cx = PLANT_W // 2
+    if stage == 0:
+        for x, y in ((3, base), (6, base - 1), (8, base), (5, base + 1)):
+            d.point((x, y), fill=SEED)
+        return img
+    if stage == 1:
+        d.line([(cx, base), (cx, base - 2)], fill=mid)
+        d.point((cx - 1, base - 3), fill=hi)
+        d.point((cx + 1, base - 3), fill=hi)
+        if style == "carpet":
+            for x in (2, 4, 8, 10):
+                d.point((x, base - 1), fill=mid)
+        return img
+    grow = stage - 1  # 1..3
+    if style == "carpet":
+        h = 1 + grow
+        for x in range(1, PLANT_W - 1):
+            top = base - h - (x % 2)
+            d.line([(x, base), (x, top)], fill=accent if grow < 3 else mid)
+            d.point((x, top), fill=hi if x % 3 else mid)
+    elif style in ("rosette", "broad", "lobed"):
+        r = 1 + grow
+        rows = [(cx - r, base - r // 2), (cx + r, base - r // 2), (cx, base - r)]
+        for (x, y) in rows:
+            _leaf(d, x, y, max(1, r - (1 if style == "lobed" else 0)), max(1, r - 1), mid, hi)
+        _leaf(d, cx, base - r - 1, max(1, r - 1), max(1, r - 1), dark if style == "broad" else mid, hi)
+        if style == "lobed":
+            for x, y in rows:
+                d.point((x, y), fill=dark)
+        if style == "rosette" and stage == 4:
+            d.ellipse([cx - 2, base - r - 2, cx + 2, base - r + 1], fill=hi)
+    elif style == "upright":
+        top = base - 3 - grow * 3
+        d.line([(cx, base), (cx, top)], fill=dark)
+        for k, y in enumerate(range(base - 2, top - 1, -3)):
+            _leaf(d, cx - 2, y, 2, 1, mid, hi)
+            _leaf(d, cx + 2, y - 1, 2, 1, mid if k % 2 else dark, hi)
+        _leaf(d, cx, top - 1, 1, 1, hi, hi)
+    elif style == "root":
+        r = grow
+        for x in (cx - 2, cx, cx + 2):
+            d.line([(x, base), (x + (x - cx) // 2, base - 2 - r * 2)], fill=dark)
+            _leaf(d, x + (x - cx) // 2, base - 3 - r * 2, 1 + r // 2, 1 + r // 2, mid, hi)
+        if stage >= 3:
+            d.ellipse([cx - 2, base - 1, cx + 2, base + 1], fill=accent)
+            d.point((cx - 1, base - 1), fill=(240, 160, 180, 255))
+    elif style == "berry":
+        r = grow
+        for x in (cx - 3, cx + 3, cx):
+            _leaf(d, x, base - 1 - r - (2 if x == cx else 0), 1 + r // 2 + 1, 1 + r // 2, mid, hi)
+        if stage == 3:
+            d.point((cx - 2, base - 2), fill=(250, 250, 240, 255))
+            d.point((cx + 3, base - 3), fill=(250, 250, 240, 255))
+        if stage == 4:
+            for x, y in ((cx - 3, base), (cx + 3, base - 1), (cx, base + 1)):
+                d.rectangle([x - 1, y - 1, x + 1, y], fill=accent)
+                d.point((x, y - 1), fill=(255, 150, 140, 255))
+    elif style == "vine":
+        top = base - 3 - grow * 3
+        d.line([(cx, base), (cx, top)], fill=dark)
+        d.line([(cx + 3, base), (cx + 3, top + 1)], fill=WOOD_DARK)  # support stake
+        for y in range(base - 2, top - 1, -3):
+            _leaf(d, cx - 2, y, 2, 1, mid, hi)
+            _leaf(d, cx + 1, y - 1, 1, 1, dark, hi)
+        if stage >= 3:
+            col = accent if stage == 4 else (150, 196, 90, 255)
+            for x, y in ((cx - 2, base - 3), (cx + 1, base - 7), (cx - 1, base - 9)):
+                d.ellipse([x - 1, y - 1, x + 1, y + 1], fill=col)
+                d.point((x - 1, y - 1), fill=(255, 190, 160, 255) if stage == 4 else hi)
+    return img
+
+
+def plant_strip(crop: str) -> Image.Image:
+    strip = new_image(PLANT_W * 5, PLANT_H)
+    for st in range(5):
+        strip.paste(plant_stage(crop, st), (st * PLANT_W, 0))
+    return strip
+
+
+def product_icon(crop: str) -> Image.Image:
+    """16x16 UI icon: the mature plant on a small cream plate."""
+    img = new_image(16, 16)
+    d = ImageDraw.Draw(img)
+    d.ellipse([1, 11, 14, 15], fill=CREAM_DARK, outline=WOOD_DARK)
+    img.alpha_composite(plant_stage(crop, 4), (2, 1))
+    return img
+
+
+def seed_icon(crop: str) -> Image.Image:
+    """16x16 kraft seed packet with the crop's colour band."""
+    dark, mid, hi, accent, _ = CROPS[crop]
+    img = new_image(16, 16)
+    d = ImageDraw.Draw(img)
+    d.rectangle([3, 1, 12, 14], fill=CREAM_DARK, outline=WOOD_DEEP)
+    d.line([(4, 3), (11, 3)], fill=WOOD_MID)
+    d.rectangle([4, 6, 11, 11], fill=mid)
+    d.ellipse([6, 7, 9, 10], fill=accent if accent != hi else dark)
+    d.point((5, 7), fill=hi)
+    return img
+
+
+def equipment_icon(kind: str) -> Image.Image:
+    img = new_image(16, 16)
+    d = ImageDraw.Draw(img)
+    if kind in ("led_basic", "led_advanced"):
+        glow = LED if kind == "led_basic" else (232, 210, 255, 255)
+        d.rectangle([1, 4, 14, 7], fill=METAL, outline=OUTLINE)
+        d.line([(3, 8), (12, 8)], fill=glow)
+        for x in (3, 7, 11):
+            d.line([(x, 9), (x - 1, 13)], fill=glow)
+        if kind == "led_advanced":
+            d.point((13, 2), fill=COIN)
+            d.point((12, 1), fill=COIN)
+    else:
+        src = {"water_tank": water_tank, "nutrient_system": nutrient_system, "ph_control": ph_control,
+               "auto_watering": auto_watering, "hydro_rack_basic": hydro_rack,
+               "hydro_rack_advanced": lambda: hydro_rack(True)}[kind]()
+        bbox = src.getbbox()
+        src = src.crop(bbox)
+        scale = min(16 / src.width, 16 / src.height)
+        if scale < 1:
+            src = src.resize((max(1, int(src.width * scale)), max(1, int(src.height * scale))), Image.NEAREST)
+        img.alpha_composite(src, ((16 - src.width) // 2, (16 - src.height) // 2))
+    return img
+
+
+def ui_small_icon(kind: str) -> Image.Image:
+    """12x12 icons for the HUD."""
+    img = new_image(12, 12)
+    d = ImageDraw.Draw(img)
+    if kind == "coin":
+        d.ellipse([1, 1, 10, 10], fill=COIN, outline=WOOD_DEEP)
+        d.line([(5, 3), (5, 8)], fill=(200, 150, 50, 255))
+        d.point((4, 3), fill=(255, 236, 160, 255))
+    elif kind == "star":
+        pts = [(6, 0), (7, 4), (11, 4), (8, 7), (9, 11), (6, 8), (3, 11), (4, 7), (1, 4), (5, 4)]
+        d.polygon(pts, fill=(255, 220, 110, 255), outline=WOOD_DEEP)
+    elif kind == "shop":
+        d.rectangle([1, 4, 10, 10], fill=CREAM, outline=OUTLINE)
+        d.polygon([(0, 4), (2, 1), (9, 1), (11, 4)], fill=TERRACOTTA, outline=OUTLINE)
+        d.rectangle([4, 6, 7, 10], fill=WOOD_MID)
+    elif kind == "storage":
+        d.rectangle([1, 3, 10, 10], fill=WOOD, outline=OUTLINE)
+        d.line([(1, 6), (10, 6)], fill=WOOD_DEEP)
+        d.rectangle([4, 5, 7, 7], fill=COIN)
+    elif kind == "skills":
+        d.line([(6, 11), (6, 4)], fill=CREAM)
+        d.ellipse([1, 2, 6, 6], fill=LEAF_HI)
+        d.ellipse([6, 0, 11, 4], fill=CREAM)
+        d.point((6, 11), fill=CREAM)
+    elif kind == "ready":
+        d.ellipse([0, 0, 11, 11], fill=LEAF, outline=OUTLINE)
+        d.line([(3, 6), (5, 8), (8, 3)], fill=CREAM)
     return img
 
 
@@ -408,6 +659,20 @@ def main() -> None:
     save(window_sprite(), "environment/window_right_wall.png")
     save(poster_sprite(), "environment/poster_left_wall.png")
     save(hydro_rack(), "objects/hydro_rack_basic.png")
+    save(hydro_rack(True), "objects/hydro_rack_advanced.png")
+    save(water_tank(), "objects/water_tank.png")
+    save(nutrient_system(), "objects/nutrient_system.png")
+    save(ph_control(), "objects/ph_control.png")
+    save(auto_watering(), "objects/auto_watering.png")
+    for crop in CROPS:
+        save(plant_strip(crop), f"plants/{crop}_stages.png")
+        save(product_icon(crop), f"icons/product_{crop}.png")
+        save(seed_icon(crop), f"icons/seed_{crop}.png")
+    for kind in ("hydro_rack_basic", "hydro_rack_advanced", "led_basic", "led_advanced",
+                 "auto_watering", "water_tank", "ph_control", "nutrient_system"):
+        save(equipment_icon(kind), f"icons/equipment_{kind}.png")
+    for kind in ("coin", "star", "shop", "storage", "skills", "ready"):
+        save(ui_small_icon(kind), f"ui/icon_{kind}.png")
     save(storage_crate(), "objects/storage_crate.png")
     save(work_table(), "objects/work_table.png")
     save(decor_monstera(), "objects/decor_monstera.png")

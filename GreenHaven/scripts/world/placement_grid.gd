@@ -86,6 +86,17 @@ func get_origin(key: StringName) -> Vector2i:
 	return _objects[key].origin if _objects.has(key) else Vector2i(-1, -1)
 
 
+func get_data_id(key: StringName) -> StringName:
+	return _objects[key].data_id if _objects.has(key) else &""
+
+
+func get_keys() -> Array[StringName]:
+	var keys: Array[StringName] = []
+	for k: StringName in _objects:
+		keys.append(k)
+	return keys
+
+
 func has_object(key: StringName) -> bool:
 	return _objects.has(key)
 

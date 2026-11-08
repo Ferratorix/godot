@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="PlantData" load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/plant_data.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/products/microgreens.tres" id="2_product"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/plants/microgreens_stages.png" id="3_strip"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/icons/seed_microgreens.png" id="4_seed"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s0"]
+atlas = ExtResource("3_strip")
+region = Rect2(0, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1"]
+atlas = ExtResource("3_strip")
+region = Rect2(12, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s2"]
+atlas = ExtResource("3_strip")
+region = Rect2(24, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3"]
+atlas = ExtResource("3_strip")
+region = Rect2(36, 0, 12, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s4"]
+atlas = ExtResource("3_strip")
+region = Rect2(48, 0, 12, 14)
+
+[resource]
+script = ExtResource("1_script")
+id = &"microgreens"
+name_key = "CROP_MICROGREENS"
+category = 0
+seed_cost = 5
+grow_time_sec = 300
+yield_amount = 2
+product = ExtResource("2_product")
+unlock_level = 1
+harvest_xp = 2
+allowed_slots = Array[int]([0, 1, 2, 3])
+stage_textures = Array[Texture2D]([SubResource("AtlasTexture_s0"), SubResource("AtlasTexture_s1"), SubResource("AtlasTexture_s2"), SubResource("AtlasTexture_s3"), SubResource("AtlasTexture_s4")])
+seed_icon = ExtResource("4_seed")

@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Theme" path="res://scenes/ui/green_haven_theme.tres" id="2_theme"]
 [ext_resource type="Texture2D" path="res://assets/placeholder/ui/icon_recenter.png" id="3_recenter"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/ui/icon_coin.png" id="4_coin"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/ui/icon_star.png" id="5_star"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/ui/icon_shop.png" id="6_shop"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/ui/icon_storage.png" id="7_storage"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/ui/icon_skills.png" id="8_skills"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
@@ -15,29 +20,99 @@ mouse_filter = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_hud")
 
-[node name="TitlePanel" type="PanelContainer" parent="."]
+[node name="TopPanel" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 160.0
-offset_bottom = 52.0
+offset_right = 200.0
+offset_bottom = 54.0
 mouse_filter = 2
 
-[node name="VBox" type="VBoxContainer" parent="TitlePanel"]
+[node name="VBox" type="VBoxContainer" parent="TopPanel"]
 layout_mode = 2
-theme_override_constants/separation = 0
 mouse_filter = 2
+theme_override_constants/separation = 1
 
-[node name="Title" type="Label" parent="TitlePanel/VBox"]
+[node name="Row" type="HBoxContainer" parent="TopPanel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.29, 0.45, 0.24, 1)
-theme_override_font_sizes/font_size = 14
-text = "UI_GAME_TITLE"
+mouse_filter = 2
+theme_override_constants/separation = 4
 
-[node name="Stage" type="Label" parent="TitlePanel/VBox"]
+[node name="CoinIcon" type="TextureRect" parent="TopPanel/VBox/Row"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+mouse_filter = 2
+texture = ExtResource("4_coin")
+stretch_mode = 5
+
+[node name="CoinsLabel" type="Label" parent="TopPanel/VBox/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "0"
+
+[node name="StarIcon" type="TextureRect" parent="TopPanel/VBox/Row"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_star")
+stretch_mode = 5
+
+[node name="LevelLabel" type="Label" parent="TopPanel/VBox/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "1"
+
+[node name="XpBar" type="ProgressBar" parent="TopPanel/VBox/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 8)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="Stage" type="Label" parent="TopPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
 text = "UI_STAGE_HOME_GARDEN"
+
+[node name="MenuButtons" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -48.0
+offset_right = 300.0
+offset_bottom = -8.0
+grow_vertical = 0
+theme_override_constants/separation = 4
+
+[node name="ShopButton" type="Button" parent="MenuButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_mode = 0
+text = "UI_SHOP"
+icon = ExtResource("6_shop")
+
+[node name="StorageButton" type="Button" parent="MenuButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_mode = 0
+text = "UI_STORAGE"
+icon = ExtResource("7_storage")
+
+[node name="SkillsButton" type="Button" parent="MenuButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_mode = 0
+text = "UI_SKILLS"
+icon = ExtResource("8_skills")
 
 [node name="CameraButtons" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -82,17 +157,14 @@ icon_alignment = 1
 [node name="HintPanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -40.0
-offset_right = 150.0
-offset_bottom = -8.0
+offset_left = -60.0
+offset_top = 8.0
+offset_right = 230.0
+offset_bottom = 48.0
 grow_horizontal = 2
-grow_vertical = 0
 mouse_filter = 2
 
 [node name="HintLabel" type="Label" parent="HintPanel"]
@@ -141,23 +213,23 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -208.0
+offset_left = -262.0
 offset_top = 60.0
-offset_right = -60.0
-offset_bottom = -60.0
+offset_right = -56.0
+offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="InfoPanel"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 3
 
 [node name="Header" type="HBoxContainer" parent="InfoPanel/VBox"]
 layout_mode = 2
 
 [node name="InfoName" type="Label" parent="InfoPanel/VBox/Header"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 0)
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.29, 0.45, 0.24, 1)
@@ -170,6 +242,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 0
+focus_mode = 0
 tooltip_text = "UI_CLOSE"
 text = "×"
 
@@ -180,14 +253,28 @@ theme_override_colors/font_color = Color(0.54, 0.35, 0.21, 1)
 theme_override_font_sizes/font_size = 10
 text = "Category"
 
-[node name="InfoDescription" type="Label" parent="InfoPanel/VBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 0)
+[node name="Scroll" type="ScrollContainer" parent="InfoPanel/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 10
+horizontal_scroll_mode = 0
+
+[node name="ScrollBox" type="VBoxContainer" parent="InfoPanel/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="InfoDescription" type="Label" parent="InfoPanel/VBox/Scroll/ScrollBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
 text = "Description"
 autowrap_mode = 3
+
+[node name="SlotsBox" type="VBoxContainer" parent="InfoPanel/VBox/Scroll/ScrollBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
 
 [node name="InfoCell" type="Label" parent="InfoPanel/VBox"]
 unique_name_in_owner = true
@@ -196,8 +283,76 @@ theme_override_colors/font_color = Color(0.45, 0.4, 0.35, 1)
 theme_override_font_sizes/font_size = 9
 text = "Cell"
 
-[node name="MoveButton" type="Button" parent="InfoPanel/VBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 36)
+[node name="Buttons" type="HBoxContainer" parent="InfoPanel/VBox"]
 layout_mode = 2
+
+[node name="MoveButton" type="Button" parent="InfoPanel/VBox/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
 text = "UI_MOVE"
+
+[node name="HarvestAllButton" type="Button" parent="InfoPanel/VBox/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "UI_HARVEST_ALL"
+
+[node name="ToastBox" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 56.0
+offset_right = 150.0
+offset_bottom = 200.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="FloatLayer" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ModalLayer" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Dim" type="ColorRect" parent="ModalLayer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.12, 0.1, 0.45)
+
+[node name="Center" type="CenterContainer" parent="ModalLayer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

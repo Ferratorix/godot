@@ -12,6 +12,12 @@ func _initialize() -> void:
 
 func _run() -> void:
 	await process_frame  # Let autoloads finish _ready().
+	# Never touch the player's real save: tests use their own folder.
+	var save_manager: Node = root.get_node("SaveManager")
+	save_manager.save_dir = "user://test_saves"
+	save_manager.autosave_enabled = false
+	save_manager.delete_all_saves()
+	root.get_node("GameManager").new_game()
 	var total := 0
 	var failed := 0
 	var files := Array(DirAccess.get_files_at(TEST_DIR))

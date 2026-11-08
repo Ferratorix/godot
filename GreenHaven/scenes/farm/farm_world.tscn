@@ -14,6 +14,7 @@ color = Color(1, 0.975, 0.93, 1)
 
 [node name="Room" parent="." instance=ExtResource("2_room")]
 layout = ExtResource("3_layout")
+auto_build = false
 
 [node name="Camera" type="Camera2D" parent="."]
 script = ExtResource("4_cam")

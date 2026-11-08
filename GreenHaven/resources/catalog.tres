@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="CatalogData" load_steps=31 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/catalog_data.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/data/plant_data.gd" id="s_plant"]
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="s_equipment"]
+[ext_resource type="Script" path="res://scripts/data/placeable_data.gd" id="s_placeable"]
+[ext_resource type="Resource" path="res://resources/plants/microgreens.tres" id="2_p_microgreens"]
+[ext_resource type="Resource" path="res://resources/plants/lettuce.tres" id="3_p_lettuce"]
+[ext_resource type="Resource" path="res://resources/plants/basil.tres" id="4_p_basil"]
+[ext_resource type="Resource" path="res://resources/plants/spinach.tres" id="5_p_spinach"]
+[ext_resource type="Resource" path="res://resources/plants/arugula.tres" id="6_p_arugula"]
+[ext_resource type="Resource" path="res://resources/plants/radish.tres" id="7_p_radish"]
+[ext_resource type="Resource" path="res://resources/plants/strawberry.tres" id="8_p_strawberry"]
+[ext_resource type="Resource" path="res://resources/plants/tomato.tres" id="9_p_tomato"]
+[ext_resource type="Resource" path="res://resources/equipment/hydro_rack_basic.tres" id="10_e_hydro_rack_basic"]
+[ext_resource type="Resource" path="res://resources/equipment/hydro_rack_advanced.tres" id="11_e_hydro_rack_advanced"]
+[ext_resource type="Resource" path="res://resources/equipment/led_basic.tres" id="12_e_led_basic"]
+[ext_resource type="Resource" path="res://resources/equipment/led_advanced.tres" id="13_e_led_advanced"]
+[ext_resource type="Resource" path="res://resources/equipment/auto_watering.tres" id="14_e_auto_watering"]
+[ext_resource type="Resource" path="res://resources/equipment/water_tank.tres" id="15_e_water_tank"]
+[ext_resource type="Resource" path="res://resources/equipment/ph_control.tres" id="16_e_ph_control"]
+[ext_resource type="Resource" path="res://resources/equipment/nutrient_system.tres" id="17_e_nutrient_system"]
+[ext_resource type="Resource" path="res://resources/placeables/auto_watering.tres" id="18_pl_auto_watering"]
+[ext_resource type="Resource" path="res://resources/placeables/decor_monstera.tres" id="19_pl_decor_monstera"]
+[ext_resource type="Resource" path="res://resources/placeables/hydro_rack_advanced.tres" id="20_pl_hydro_rack_advanced"]
+[ext_resource type="Resource" path="res://resources/placeables/hydro_rack_basic.tres" id="21_pl_hydro_rack_basic"]
+[ext_resource type="Resource" path="res://resources/placeables/nutrient_system.tres" id="22_pl_nutrient_system"]
+[ext_resource type="Resource" path="res://resources/placeables/ph_control.tres" id="23_pl_ph_control"]
+[ext_resource type="Resource" path="res://resources/placeables/shipping_box.tres" id="24_pl_shipping_box"]
+[ext_resource type="Resource" path="res://resources/placeables/storage_crate.tres" id="25_pl_storage_crate"]
+[ext_resource type="Resource" path="res://resources/placeables/water_tank.tres" id="26_pl_water_tank"]
+[ext_resource type="Resource" path="res://resources/placeables/work_table.tres" id="27_pl_work_table"]
+
+[resource]
+script = ExtResource("1_script")
+plants = Array[ExtResource("s_plant")]([ExtResource("2_p_microgreens"), ExtResource("3_p_lettuce"), ExtResource("4_p_basil"), ExtResource("5_p_spinach"), ExtResource("6_p_arugula"), ExtResource("7_p_radish"), ExtResource("8_p_strawberry"), ExtResource("9_p_tomato")])
+equipment = Array[ExtResource("s_equipment")]([ExtResource("10_e_hydro_rack_basic"), ExtResource("11_e_hydro_rack_advanced"), ExtResource("12_e_led_basic"), ExtResource("13_e_led_advanced"), ExtResource("14_e_auto_watering"), ExtResource("15_e_water_tank"), ExtResource("16_e_ph_control"), ExtResource("17_e_nutrient_system")])
+placeables = Array[ExtResource("s_placeable")]([ExtResource("18_pl_auto_watering"), ExtResource("19_pl_decor_monstera"), ExtResource("20_pl_hydro_rack_advanced"), ExtResource("21_pl_hydro_rack_basic"), ExtResource("22_pl_nutrient_system"), ExtResource("23_pl_ph_control"), ExtResource("24_pl_shipping_box"), ExtResource("25_pl_storage_crate"), ExtResource("26_pl_water_tank"), ExtResource("27_pl_work_table")])
+starting_coins = 100
+starting_items = {
+&"seed_lettuce": 2,
+&"seed_microgreens": 4
+}

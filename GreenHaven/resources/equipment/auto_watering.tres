@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EquipmentData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/icons/equipment_auto_watering.png" id="2_icon"]
+[ext_resource type="Resource" path="res://resources/placeables/auto_watering.tres" id="3_placeable"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"auto_watering"
+name_key = "EQ_AUTO_WATERING_NAME"
+description_key = "EQ_AUTO_WATERING_DESC"
+category = 2
+cost = 400
+icon = ExtResource("2_icon")
+unlock_level = 3
+max_count = 1
+requires = &"water_tank"
+replaces = &""
+growth_time_multiplier = 0.95
+yield_bonus = 0.0
+placeable = ExtResource("3_placeable")

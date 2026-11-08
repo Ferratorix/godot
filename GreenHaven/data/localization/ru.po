@@ -22,7 +22,7 @@ msgid "UI_RECENTER"
 msgstr "Показать всю комнату"
 
 msgid "UI_HINT_CONTROLS"
-msgstr "Нажмите на предмет, чтобы выбрать. Удерживайте, чтобы переместить. Двумя пальцами — масштаб."
+msgstr "Нажмите на стеллаж, чтобы посадить или собрать. Удерживайте предмет, чтобы переместить."
 
 msgid "UI_MOVE_MODE_HINT"
 msgstr "Нажмите на свободную клетку, куда поставить предмет"
@@ -64,13 +64,13 @@ msgid "OBJ_HYDRO_RACK_NAME"
 msgstr "Гидропонный стеллаж"
 
 msgid "OBJ_HYDRO_RACK_DESC"
-msgstr "Три яруса лотков с питательным раствором. Здесь будут расти первые культуры.\n(Посадка появится в версии 0.2)"
+msgstr "Три лотка для посадки. Выберите место и посадите семена; нажмите на созревший стеллаж, чтобы собрать урожай."
 
 msgid "OBJ_STORAGE_CRATE_NAME"
 msgstr "Ящик для хранения"
 
 msgid "OBJ_STORAGE_CRATE_DESC"
-msgstr "Деревянный ящик для семян и урожая.\n(Склад появится в версии 0.4)"
+msgstr "Здесь хранятся семена и урожай."
 
 msgid "OBJ_WORK_TABLE_NAME"
 msgstr "Рабочий стол"
@@ -88,4 +88,373 @@ msgid "OBJ_SHIPPING_BOX_NAME"
 msgstr "Короб для продажи"
 
 msgid "OBJ_SHIPPING_BOX_DESC"
-msgstr "Сюда кладут урожай на продажу.\n(Продажа появится в версии 0.4)"
+msgstr "Сюда кладут урожай на продажу."
+
+msgid "CROP_MICROGREENS"
+msgstr "Микрозелень"
+
+msgid "CROP_LETTUCE"
+msgstr "Салат"
+
+msgid "CROP_BASIL"
+msgstr "Базилик"
+
+msgid "CROP_SPINACH"
+msgstr "Шпинат"
+
+msgid "CROP_ARUGULA"
+msgstr "Руккола"
+
+msgid "CROP_RADISH"
+msgstr "Редис"
+
+msgid "CROP_STRAWBERRY"
+msgstr "Клубника"
+
+msgid "CROP_TOMATO"
+msgstr "Помидоры"
+
+msgid "EQ_HYDRO_RACK_NAME"
+msgstr "Гидропонный стеллаж"
+
+msgid "EQ_HYDRO_RACK_DESC"
+msgstr "Ещё один стеллаж: три лотка для посадки."
+
+msgid "EQ_HYDRO_RACK_ADV_NAME"
+msgstr "Улучшенный стеллаж"
+
+msgid "EQ_HYDRO_RACK_ADV_DESC"
+msgstr "Двойные лотки с циркуляцией раствора."
+
+msgid "EQ_LED_NAME"
+msgstr "LED-освещение"
+
+msgid "EQ_LED_DESC"
+msgstr "Фитолампы над всеми стеллажами."
+
+msgid "EQ_LED_ADV_NAME"
+msgstr "Улучшенное LED"
+
+msgid "EQ_LED_ADV_DESC"
+msgstr "Полный спектр и таймер. Заменяет обычные лампы."
+
+msgid "EQ_AUTO_WATERING_NAME"
+msgstr "Автополив"
+
+msgid "EQ_AUTO_WATERING_DESC"
+msgstr "Насос сам подаёт раствор. Нужен резервуар."
+
+msgid "EQ_WATER_TANK_NAME"
+msgstr "Резервуар для воды"
+
+msgid "EQ_WATER_TANK_DESC"
+msgstr "Отстоянная вода стабильной температуры."
+
+msgid "EQ_PH_CONTROL_NAME"
+msgstr "Контроль pH"
+
+msgid "EQ_PH_CONTROL_DESC"
+msgstr "Датчик поддерживает кислотность раствора."
+
+msgid "EQ_NUTRIENT_SYSTEM_NAME"
+msgstr "Система питания"
+
+msgid "EQ_NUTRIENT_SYSTEM_DESC"
+msgstr "Автоматическая дозировка удобрений A/B/C."
+
+msgid "OBJ_HYDRO_RACK_ADV_NAME"
+msgstr "Улучшенный стеллаж"
+
+msgid "OBJ_HYDRO_RACK_ADV_DESC"
+msgstr "Шесть посадочных мест. Нажмите на созревшие растения, чтобы собрать урожай."
+
+msgid "OBJ_WATER_TANK_NAME"
+msgstr "Резервуар для воды"
+
+msgid "OBJ_WATER_TANK_DESC"
+msgstr "+5% к урожаю новых посадок."
+
+msgid "OBJ_PH_CONTROL_NAME"
+msgstr "Контроль pH"
+
+msgid "OBJ_PH_CONTROL_DESC"
+msgstr "+10% к урожаю новых посадок."
+
+msgid "OBJ_NUTRIENT_SYSTEM_NAME"
+msgstr "Система питания"
+
+msgid "OBJ_NUTRIENT_SYSTEM_DESC"
+msgstr "Новые посадки растут на 15% быстрее."
+
+msgid "OBJ_AUTO_WATERING_NAME"
+msgstr "Автополив"
+
+msgid "OBJ_AUTO_WATERING_DESC"
+msgstr "Новые посадки растут на 5% быстрее."
+
+msgid "ERR_NO_SLOT"
+msgstr "Нет такого места для посадки."
+
+msgid "ERR_SLOT_BUSY"
+msgstr "Место уже занято."
+
+msgid "ERR_LOCKED"
+msgstr "Ещё не открыто — нужен более высокий уровень."
+
+msgid "ERR_NO_SEEDS"
+msgstr "Нет семян. Купите их в магазине."
+
+msgid "ERR_SLOT_TYPE"
+msgstr "Эта культура здесь не растёт."
+
+msgid "ERR_NOT_READY"
+msgstr "Ещё не созрело."
+
+msgid "ERR_NO_MONEY"
+msgstr "Не хватает монет."
+
+msgid "ERR_MAX_OWNED"
+msgstr "Уже куплено максимальное количество."
+
+msgid "ERR_REQUIRES"
+msgstr "Сначала нужно другое оборудование."
+
+msgid "ERR_NO_SPACE"
+msgstr "В комнате нет свободного места."
+
+msgid "ERR_UNKNOWN"
+msgstr "Действие недоступно."
+
+msgid "ERR_NO_SLOT_SHORT"
+msgstr "Нет места"
+
+msgid "ERR_SLOT_BUSY_SHORT"
+msgstr "Занято"
+
+msgid "ERR_LOCKED_SHORT"
+msgstr "Закрыто"
+
+msgid "ERR_NO_SEEDS_SHORT"
+msgstr "Нет семян"
+
+msgid "ERR_SLOT_TYPE_SHORT"
+msgstr "Не подходит"
+
+msgid "ERR_NOT_READY_SHORT"
+msgstr "Растёт"
+
+msgid "ERR_NO_MONEY_SHORT"
+msgstr "Мало монет"
+
+msgid "ERR_MAX_OWNED_SHORT"
+msgstr "Куплено"
+
+msgid "ERR_REQUIRES_SHORT"
+msgstr "Нужен бак"
+
+msgid "ERR_NO_SPACE_SHORT"
+msgstr "Нет места"
+
+msgid "ERR_UNKNOWN_SHORT"
+msgstr "Недоступно"
+
+msgid "SKILL_AGRONOMY"
+msgstr "Агрономия"
+
+msgid "SKILL_AGRONOMY_DESC"
+msgstr "−4% времени роста новых посадок за уровень."
+
+msgid "SKILL_TRADE"
+msgstr "Торговля"
+
+msgid "SKILL_TRADE_DESC"
+msgstr "+5% к цене продажи за уровень."
+
+msgid "SKILL_TECHNOLOGY"
+msgstr "Технологии"
+
+msgid "SKILL_TECHNOLOGY_DESC"
+msgstr "Автоматизация производства. Этап «Умная гидропоника»."
+
+msgid "SKILL_MECHANICS"
+msgstr "Механика"
+
+msgid "SKILL_MECHANICS_DESC"
+msgstr "Сельхозтехника. Этап «Небольшая ферма»."
+
+msgid "SKILL_LIVESTOCK"
+msgstr "Животноводство"
+
+msgid "SKILL_LIVESTOCK_DESC"
+msgstr "Уход за животными. Этап «Животноводство»."
+
+msgid "UI_SHOP"
+msgstr "Магазин"
+
+msgid "UI_STORAGE"
+msgstr "Склад"
+
+msgid "UI_SKILLS"
+msgstr "Навыки"
+
+msgid "UI_TAB_SEEDS"
+msgstr "Семена"
+
+msgid "UI_TAB_EQUIPMENT"
+msgstr "Оборудование"
+
+msgid "UI_TAB_PRODUCE"
+msgstr "Урожай"
+
+msgid "UI_TAB_STATS"
+msgstr "Статистика"
+
+msgid "UI_BUY"
+msgstr "Купить"
+
+msgid "UI_BOUGHT_FMT"
+msgstr "Куплено: %s"
+
+msgid "UI_PURCHASED"
+msgstr "Куплено"
+
+msgid "UI_OWNED_FMT"
+msgstr "Есть: %d из %d"
+
+msgid "UI_SEED_INFO_FMT"
+msgstr "Рост %s · урожай %d × %d · в запасе %d"
+
+msgid "UI_UNLOCK_LEVEL_FMT"
+msgstr "Откроется на уровне %d"
+
+msgid "UI_LEVEL_SHORT_FMT"
+msgstr "Ур. %d"
+
+msgid "UI_LEVEL_FMT"
+msgstr "Уровень %d"
+
+msgid "UI_XP_FMT"
+msgstr "Опыт: %d / %d"
+
+msgid "UI_LEVEL_UP_FMT"
+msgstr "Новый уровень: %d! Получено очко навыка."
+
+msgid "UI_SKILL_POINTS_FMT"
+msgstr "Очки навыков: %d"
+
+msgid "UI_SKILL_LEVEL_FMT"
+msgstr "Уровень навыка: %d / %d"
+
+msgid "UI_UPGRADE"
+msgstr "Улучшить"
+
+msgid "UI_MAXED"
+msgstr "Максимум"
+
+msgid "UI_LOCKED_STAGE"
+msgstr "Позже"
+
+msgid "UI_UNLOCKS_TITLE"
+msgstr "Впереди"
+
+msgid "UI_EFFECT_TIME_FMT"
+msgstr "−%d%% времени роста"
+
+msgid "UI_EFFECT_YIELD_FMT"
+msgstr "+%d%% урожая"
+
+msgid "UI_EFFECT_SLOTS_FMT"
+msgstr "мест для посадки: +%d"
+
+msgid "UI_EFFECT_REPLACES"
+msgstr "заменяет обычное"
+
+msgid "UI_SELL_ONE"
+msgstr "1"
+
+msgid "UI_SELL_ALL"
+msgstr "Все"
+
+msgid "UI_SELL_EVERYTHING"
+msgstr "Продать всё"
+
+msgid "UI_COUNT_PRICE_FMT"
+msgstr "%d шт. по %d"
+
+msgid "UI_COUNT_FMT"
+msgstr "%d шт."
+
+msgid "UI_TOTAL_VALUE"
+msgstr "Стоимость склада"
+
+msgid "UI_STORAGE_EMPTY"
+msgstr "Склад пуст. Соберите урожай со стеллажей."
+
+msgid "UI_NO_SEEDS"
+msgstr "Семян нет. Их можно купить в магазине."
+
+msgid "UI_SOLD_FMT"
+msgstr "Продано на %d монет"
+
+msgid "UI_STAT_BALANCE"
+msgstr "Баланс"
+
+msgid "UI_STAT_INCOME"
+msgstr "Доходы всего"
+
+msgid "UI_STAT_EXPENSE"
+msgstr "Расходы всего"
+
+msgid "UI_CAT_SALES"
+msgstr "продажа урожая"
+
+msgid "UI_CAT_SEEDS"
+msgstr "семена"
+
+msgid "UI_CAT_EQUIPMENT"
+msgstr "оборудование"
+
+msgid "UI_CAT_OTHER"
+msgstr "прочее"
+
+msgid "UI_RECENT_TRANSACTIONS"
+msgstr "Последние операции"
+
+msgid "UI_CHOOSE_SEED"
+msgstr "Что посадить?"
+
+msgid "UI_PLANT_INFO_FMT"
+msgstr "В запасе %d · рост %s"
+
+msgid "UI_PLANT"
+msgstr "Посадить"
+
+msgid "UI_TO_SHOP"
+msgstr "В магазин"
+
+msgid "UI_HARVEST"
+msgstr "Собрать"
+
+msgid "UI_HARVEST_ALL"
+msgstr "Собрать всё"
+
+msgid "UI_HARVESTED_FMT"
+msgstr "Собрано: %s"
+
+msgid "UI_READY"
+msgstr "Готово к сбору!"
+
+msgid "UI_GROWING_FMT"
+msgstr "Растёт · %s · %d%%"
+
+msgid "UI_SLOT_EMPTY_FMT"
+msgstr "Место %d"
+
+msgid "UI_SLOT_EMPTY_HINT"
+msgstr "Пусто"
+
+msgid "UI_WELCOME_BACK_FMT"
+msgstr "С возвращением! Вас не было %s, созрело растений: %d"
+
+msgid "UI_OPEN_STORAGE"
+msgstr "Открыть склад"

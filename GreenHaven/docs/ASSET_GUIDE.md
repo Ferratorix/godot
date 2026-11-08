@@ -48,5 +48,12 @@
 | `placeholder/ui/*.png` | `scenes/ui/green_haven_theme.tres` |
 | `icon.png` | иконка приложения |
 
-Для стадий растений (PHASE 2) нужно 5 кадров на культуру, 16×16 или 16×24, с опорой
-по нижнему центру лотка.
+| `placeholder/plants/<crop>_stages.png` | 5 кадров 12×14 в ряд → `AtlasTexture` в `resources/plants/*.tres` |
+| `placeholder/icons/product_*, seed_*, equipment_*` | иконки 16×16 для UI |
+| `placeholder/ui/icon_*.png` | иконки HUD 12×12 (монета, звезда, магазин, склад, навыки, «готово») |
+
+### Растения
+* Кадр 12×14, линия грунта на 2 px выше нижнего края (`WorldObject.PLANT_SOIL_OFFSET`).
+* Позиции на стеллаже — `PlaceableData.slot_positions` (относительно центра основания).
+* Стадии: 0 семена (точки), 1 росток, 2 молодое, 3 взрослое (цветы/зелёные плоды),
+  4 созревшее (цвет плода/корнеплода хорошо виден).

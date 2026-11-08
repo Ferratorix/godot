@@ -22,7 +22,7 @@ msgid "UI_RECENTER"
 msgstr "Show whole room"
 
 msgid "UI_HINT_CONTROLS"
-msgstr "Tap an object to select it. Hold to move it. Pinch to zoom."
+msgstr "Tap a rack to plant or harvest. Hold an object to move it."
 
 msgid "UI_MOVE_MODE_HINT"
 msgstr "Tap a free tile to place the object"
@@ -64,13 +64,13 @@ msgid "OBJ_HYDRO_RACK_NAME"
 msgstr "Hydroponic rack"
 
 msgid "OBJ_HYDRO_RACK_DESC"
-msgstr "Three tiers of trays with nutrient solution. Your first crops will grow here.\n(Planting arrives in v0.2)"
+msgstr "Three planting trays. Plant seeds in a slot; tap a ripe rack to harvest."
 
 msgid "OBJ_STORAGE_CRATE_NAME"
 msgstr "Storage crate"
 
 msgid "OBJ_STORAGE_CRATE_DESC"
-msgstr "A wooden crate for seeds and harvest.\n(Storage arrives in v0.4)"
+msgstr "Seeds and harvest are kept here."
 
 msgid "OBJ_WORK_TABLE_NAME"
 msgstr "Work table"
@@ -88,4 +88,373 @@ msgid "OBJ_SHIPPING_BOX_NAME"
 msgstr "Shipping box"
 
 msgid "OBJ_SHIPPING_BOX_DESC"
-msgstr "Put harvest here to sell it.\n(Selling arrives in v0.4)"
+msgstr "Put harvest here to sell it."
+
+msgid "CROP_MICROGREENS"
+msgstr "Microgreens"
+
+msgid "CROP_LETTUCE"
+msgstr "Lettuce"
+
+msgid "CROP_BASIL"
+msgstr "Basil"
+
+msgid "CROP_SPINACH"
+msgstr "Spinach"
+
+msgid "CROP_ARUGULA"
+msgstr "Arugula"
+
+msgid "CROP_RADISH"
+msgstr "Radish"
+
+msgid "CROP_STRAWBERRY"
+msgstr "Strawberry"
+
+msgid "CROP_TOMATO"
+msgstr "Tomatoes"
+
+msgid "EQ_HYDRO_RACK_NAME"
+msgstr "Hydroponic rack"
+
+msgid "EQ_HYDRO_RACK_DESC"
+msgstr "One more rack with three planting trays."
+
+msgid "EQ_HYDRO_RACK_ADV_NAME"
+msgstr "Advanced rack"
+
+msgid "EQ_HYDRO_RACK_ADV_DESC"
+msgstr "Double trays with circulating solution."
+
+msgid "EQ_LED_NAME"
+msgstr "LED lighting"
+
+msgid "EQ_LED_DESC"
+msgstr "Grow lights above every rack."
+
+msgid "EQ_LED_ADV_NAME"
+msgstr "Advanced LED"
+
+msgid "EQ_LED_ADV_DESC"
+msgstr "Full spectrum with a timer. Replaces basic lights."
+
+msgid "EQ_AUTO_WATERING_NAME"
+msgstr "Auto-watering"
+
+msgid "EQ_AUTO_WATERING_DESC"
+msgstr "A pump feeds the solution. Needs a water tank."
+
+msgid "EQ_WATER_TANK_NAME"
+msgstr "Water tank"
+
+msgid "EQ_WATER_TANK_DESC"
+msgstr "Settled water at a stable temperature."
+
+msgid "EQ_PH_CONTROL_NAME"
+msgstr "pH control"
+
+msgid "EQ_PH_CONTROL_DESC"
+msgstr "A probe keeps the solution's acidity right."
+
+msgid "EQ_NUTRIENT_SYSTEM_NAME"
+msgstr "Nutrient system"
+
+msgid "EQ_NUTRIENT_SYSTEM_DESC"
+msgstr "Automatic A/B/C nutrient dosing."
+
+msgid "OBJ_HYDRO_RACK_ADV_NAME"
+msgstr "Advanced rack"
+
+msgid "OBJ_HYDRO_RACK_ADV_DESC"
+msgstr "Six planting slots. Tap ripe plants to harvest."
+
+msgid "OBJ_WATER_TANK_NAME"
+msgstr "Water tank"
+
+msgid "OBJ_WATER_TANK_DESC"
+msgstr "+5% yield for new plantings."
+
+msgid "OBJ_PH_CONTROL_NAME"
+msgstr "pH control"
+
+msgid "OBJ_PH_CONTROL_DESC"
+msgstr "+10% yield for new plantings."
+
+msgid "OBJ_NUTRIENT_SYSTEM_NAME"
+msgstr "Nutrient system"
+
+msgid "OBJ_NUTRIENT_SYSTEM_DESC"
+msgstr "New plantings grow 15% faster."
+
+msgid "OBJ_AUTO_WATERING_NAME"
+msgstr "Auto-watering"
+
+msgid "OBJ_AUTO_WATERING_DESC"
+msgstr "New plantings grow 5% faster."
+
+msgid "ERR_NO_SLOT"
+msgstr "No such slot."
+
+msgid "ERR_SLOT_BUSY"
+msgstr "The slot is occupied."
+
+msgid "ERR_LOCKED"
+msgstr "Not unlocked yet — a higher level is needed."
+
+msgid "ERR_NO_SEEDS"
+msgstr "No seeds. Buy some in the shop."
+
+msgid "ERR_SLOT_TYPE"
+msgstr "This crop cannot grow here."
+
+msgid "ERR_NOT_READY"
+msgstr "Not ripe yet."
+
+msgid "ERR_NO_MONEY"
+msgstr "Not enough coins."
+
+msgid "ERR_MAX_OWNED"
+msgstr "Maximum amount already owned."
+
+msgid "ERR_REQUIRES"
+msgstr "Requires other equipment first."
+
+msgid "ERR_NO_SPACE"
+msgstr "No free space in the room."
+
+msgid "ERR_UNKNOWN"
+msgstr "Action unavailable."
+
+msgid "ERR_NO_SLOT_SHORT"
+msgstr "No slot"
+
+msgid "ERR_SLOT_BUSY_SHORT"
+msgstr "Busy"
+
+msgid "ERR_LOCKED_SHORT"
+msgstr "Locked"
+
+msgid "ERR_NO_SEEDS_SHORT"
+msgstr "No seeds"
+
+msgid "ERR_SLOT_TYPE_SHORT"
+msgstr "Unsuitable"
+
+msgid "ERR_NOT_READY_SHORT"
+msgstr "Growing"
+
+msgid "ERR_NO_MONEY_SHORT"
+msgstr "Need coins"
+
+msgid "ERR_MAX_OWNED_SHORT"
+msgstr "Owned"
+
+msgid "ERR_REQUIRES_SHORT"
+msgstr "Needs tank"
+
+msgid "ERR_NO_SPACE_SHORT"
+msgstr "No space"
+
+msgid "ERR_UNKNOWN_SHORT"
+msgstr "Unavailable"
+
+msgid "SKILL_AGRONOMY"
+msgstr "Agronomy"
+
+msgid "SKILL_AGRONOMY_DESC"
+msgstr "−4% growth time of new plantings per level."
+
+msgid "SKILL_TRADE"
+msgstr "Trade"
+
+msgid "SKILL_TRADE_DESC"
+msgstr "+5% sell price per level."
+
+msgid "SKILL_TECHNOLOGY"
+msgstr "Technology"
+
+msgid "SKILL_TECHNOLOGY_DESC"
+msgstr "Production automation. Smart Hydroponics stage."
+
+msgid "SKILL_MECHANICS"
+msgstr "Mechanics"
+
+msgid "SKILL_MECHANICS_DESC"
+msgstr "Farm machinery. Small Farm stage."
+
+msgid "SKILL_LIVESTOCK"
+msgstr "Livestock"
+
+msgid "SKILL_LIVESTOCK_DESC"
+msgstr "Animal care. Livestock stage."
+
+msgid "UI_SHOP"
+msgstr "Shop"
+
+msgid "UI_STORAGE"
+msgstr "Storage"
+
+msgid "UI_SKILLS"
+msgstr "Skills"
+
+msgid "UI_TAB_SEEDS"
+msgstr "Seeds"
+
+msgid "UI_TAB_EQUIPMENT"
+msgstr "Equipment"
+
+msgid "UI_TAB_PRODUCE"
+msgstr "Produce"
+
+msgid "UI_TAB_STATS"
+msgstr "Statistics"
+
+msgid "UI_BUY"
+msgstr "Buy"
+
+msgid "UI_BOUGHT_FMT"
+msgstr "Bought: %s"
+
+msgid "UI_PURCHASED"
+msgstr "Owned"
+
+msgid "UI_OWNED_FMT"
+msgstr "Owned: %d of %d"
+
+msgid "UI_SEED_INFO_FMT"
+msgstr "Grows %s · yield %d × %d · have %d"
+
+msgid "UI_UNLOCK_LEVEL_FMT"
+msgstr "Unlocks at level %d"
+
+msgid "UI_LEVEL_SHORT_FMT"
+msgstr "Lv. %d"
+
+msgid "UI_LEVEL_FMT"
+msgstr "Level %d"
+
+msgid "UI_XP_FMT"
+msgstr "XP: %d / %d"
+
+msgid "UI_LEVEL_UP_FMT"
+msgstr "Level %d reached! You got a skill point."
+
+msgid "UI_SKILL_POINTS_FMT"
+msgstr "Skill points: %d"
+
+msgid "UI_SKILL_LEVEL_FMT"
+msgstr "Skill level: %d / %d"
+
+msgid "UI_UPGRADE"
+msgstr "Upgrade"
+
+msgid "UI_MAXED"
+msgstr "Maxed"
+
+msgid "UI_LOCKED_STAGE"
+msgstr "Later"
+
+msgid "UI_UNLOCKS_TITLE"
+msgstr "Coming up"
+
+msgid "UI_EFFECT_TIME_FMT"
+msgstr "−%d%% growth time"
+
+msgid "UI_EFFECT_YIELD_FMT"
+msgstr "+%d%% yield"
+
+msgid "UI_EFFECT_SLOTS_FMT"
+msgstr "+%d planting slots"
+
+msgid "UI_EFFECT_REPLACES"
+msgstr "replaces the basic one"
+
+msgid "UI_SELL_ONE"
+msgstr "1"
+
+msgid "UI_SELL_ALL"
+msgstr "All"
+
+msgid "UI_SELL_EVERYTHING"
+msgstr "Sell everything"
+
+msgid "UI_COUNT_PRICE_FMT"
+msgstr "%d pcs × %d"
+
+msgid "UI_COUNT_FMT"
+msgstr "%d pcs"
+
+msgid "UI_TOTAL_VALUE"
+msgstr "Storage value"
+
+msgid "UI_STORAGE_EMPTY"
+msgstr "Storage is empty. Harvest your racks."
+
+msgid "UI_NO_SEEDS"
+msgstr "No seeds. You can buy them in the shop."
+
+msgid "UI_SOLD_FMT"
+msgstr "Sold for %d coins"
+
+msgid "UI_STAT_BALANCE"
+msgstr "Balance"
+
+msgid "UI_STAT_INCOME"
+msgstr "Total income"
+
+msgid "UI_STAT_EXPENSE"
+msgstr "Total expenses"
+
+msgid "UI_CAT_SALES"
+msgstr "produce sales"
+
+msgid "UI_CAT_SEEDS"
+msgstr "seeds"
+
+msgid "UI_CAT_EQUIPMENT"
+msgstr "equipment"
+
+msgid "UI_CAT_OTHER"
+msgstr "other"
+
+msgid "UI_RECENT_TRANSACTIONS"
+msgstr "Recent transactions"
+
+msgid "UI_CHOOSE_SEED"
+msgstr "What to plant?"
+
+msgid "UI_PLANT_INFO_FMT"
+msgstr "Have %d · grows %s"
+
+msgid "UI_PLANT"
+msgstr "Plant"
+
+msgid "UI_TO_SHOP"
+msgstr "To the shop"
+
+msgid "UI_HARVEST"
+msgstr "Harvest"
+
+msgid "UI_HARVEST_ALL"
+msgstr "Harvest all"
+
+msgid "UI_HARVESTED_FMT"
+msgstr "Harvested: %s"
+
+msgid "UI_READY"
+msgstr "Ready to harvest!"
+
+msgid "UI_GROWING_FMT"
+msgstr "Growing · %s · %d%%"
+
+msgid "UI_SLOT_EMPTY_FMT"
+msgstr "Slot %d"
+
+msgid "UI_SLOT_EMPTY_HINT"
+msgstr "Empty"
+
+msgid "UI_WELCOME_BACK_FMT"
+msgstr "Welcome back! You were away %s, plants ripened: %d"
+
+msgid "UI_OPEN_STORAGE"
+msgstr "Open storage"

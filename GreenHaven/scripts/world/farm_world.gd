@@ -9,6 +9,8 @@ extends Node2D
 signal selection_changed(object: WorldObject)
 signal object_moved(instance_key: StringName, from_cell: Vector2i, to_cell: Vector2i)
 signal move_mode_changed(active: bool)
+## Ready plants were harvested by tapping a rack. result: product id -> amount.
+signal harvested(screen_position: Vector2, result: Dictionary)
 ## First meaningful interaction (used to hide the onboarding hint).
 signal player_interacted
 
@@ -38,7 +40,16 @@ func _ready() -> void:
 	room.selection_cleared.connect(func() -> void: selection_changed.emit(null))
 	room.object_moved.connect(func(k: StringName, a: Vector2i, b: Vector2i) -> void:
 		object_moved.emit(k, a, b))
+	GameManager.farm_replaced.connect(_bind_farm)
+	if GameManager.farm:
+		_bind_farm(GameManager.farm)
 	_setup_camera()
+
+
+func _bind_farm(farm: FarmState) -> void:
+	cancel_move_mode()
+	room.build(room.layout, farm)
+	selection_changed.emit(null)
 
 
 func _process(delta: float) -> void:
@@ -101,6 +112,10 @@ func _on_tapped(screen_pos: Vector2) -> void:
 		return
 	var obj := room.pick_object(world_pos)
 	if obj:
+		# One-tap harvest: tapping a rack with ripe plants collects them.
+		if obj.has_grow_slots() and room.farm.count_ready(obj.instance_key) > 0:
+			var result := room.farm.harvest_all(obj.instance_key)
+			harvested.emit(screen_pos, result)
 		room.select_object(obj)
 	else:
 		room.clear_selection()

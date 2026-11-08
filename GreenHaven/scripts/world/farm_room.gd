@@ -1,10 +1,11 @@
 class_name FarmRoom
 extends Node2D
-## An indoor isometric room built from RoomLayoutData.
+## An indoor isometric room: the VIEW of a FarmState.
 ##
-## Owns: floor TileMapLayer, wall segments, wall decor, placed objects and
-## their PlacementGrid. Exposes grid <-> world conversion, picking, selection
-## and the drag-to-move workflow. Does not handle input itself.
+## Builds floor/walls/decor from RoomLayoutData and spawns a WorldObject for
+## every object in the FarmState's PlacementGrid (the model owns occupancy).
+## Exposes grid <-> world conversion, picking, selection and the drag-to-move
+## workflow. Does not handle input itself.
 
 signal object_selected(object: WorldObject)
 signal selection_cleared
@@ -18,7 +19,12 @@ const POSTER_TEXTURE: Texture2D = preload("res://assets/placeholder/environment/
 const FLOOR_SOURCE_ID: int = 0
 
 @export var layout: RoomLayoutData
+## Build a standalone farm from [member layout] in _ready (previews/tests).
+## FarmWorld turns this off and binds the session's FarmState instead.
+@export var auto_build: bool = true
 
+## The model shown by this room. Its placement grid is shared, not copied.
+var farm: FarmState
 var grid: PlacementGrid
 var selected: WorldObject
 var _objects: Dictionary = {}  # instance key -> WorldObject
@@ -34,45 +40,78 @@ var _drag_valid: bool = false
 
 
 func _ready() -> void:
-	if layout:
+	TimeManager.second_tick.connect(_on_second_tick)
+	if auto_build and layout and farm == null:
 		build(layout)
 
 
-## (Re)builds the whole room from data. Safe to call more than once.
-func build(room_layout: RoomLayoutData) -> void:
+## (Re)builds the whole room. Without [param farm_state] a fresh farm is
+## created from the layout (used by isolated tests / previews).
+func build(room_layout: RoomLayoutData, farm_state: FarmState = null) -> void:
 	layout = room_layout
+	if farm and farm.object_added.is_connected(_on_object_added):
+		farm.object_added.disconnect(_on_object_added)
+		farm.slot_changed.disconnect(_on_slot_changed)
+		farm.equipment_changed.disconnect(refresh_all_plants)
+	farm = farm_state if farm_state else FarmState.from_layout(room_layout)
+	farm.object_added.connect(_on_object_added)
+	farm.slot_changed.connect(_on_slot_changed)
+	farm.equipment_changed.connect(refresh_all_plants)
 	clear_selection()
 	floor_layer.clear()
-	for child in walls.get_children():
-		child.queue_free()
-	for child in objects_root.get_children():
-		child.queue_free()
-	for child in ambience.get_children():
-		child.queue_free()
+	for container: Node in [walls, objects_root, ambience]:
+		for child in container.get_children():
+			container.remove_child(child)  # Gone now, not at frame end.
+			child.queue_free()
 	_objects.clear()
-	grid = PlacementGrid.new(layout.size)
+	grid = farm.placement
 	_build_floor()
 	_build_walls()
-	var counter: int = 0
-	for placement in layout.initial_objects:
-		if placement == null or placement.placeable == null or not placement.placeable.is_valid():
-			push_warning("FarmRoom: invalid placement in layout '%s'" % layout.id)
-			continue
-		counter += 1
-		var key := StringName("%s_%d" % [placement.placeable.id, counter])
-		spawn_object(placement.placeable, key, placement.cell)
+	for key in grid.get_keys():
+		_on_object_added(key)
+	refresh_all_plants()
 
 
-func spawn_object(data: PlaceableData, key: StringName, cell: Vector2i) -> WorldObject:
-	if not grid.place(key, data.id, cell, data.footprint):
-		push_warning("FarmRoom: cannot place '%s' at %s" % [key, cell])
-		return null
+## Creates the view of an object that already exists in the model.
+func _spawn_view(data: PlaceableData, key: StringName, cell: Vector2i) -> WorldObject:
 	var obj: WorldObject = WORLD_OBJECT_SCENE.instantiate()
 	obj.setup(data, key, cell)
 	obj.position = cell_to_local(cell)
 	objects_root.add_child(obj)
 	_objects[key] = obj
 	return obj
+
+
+func _on_object_added(key: StringName) -> void:
+	var data := farm.get_object_data(key)
+	if data == null or _objects.has(key):
+		return
+	var obj := _spawn_view(data, key, grid.get_origin(key))
+	if obj and is_inside_tree() and grid.object_count() > 0:
+		obj.refresh_plants(farm, TimeManager.now())
+
+
+func _on_slot_changed(key: StringName, _index: int) -> void:
+	var obj: WorldObject = _objects.get(key)
+	if obj:
+		obj.refresh_plants(farm, TimeManager.now())
+
+
+## Updates plant sprites (stages advance with real time) and lighting.
+func refresh_all_plants() -> void:
+	var now := TimeManager.now()
+	for obj: WorldObject in _objects.values():
+		obj.refresh_plants(farm, now)
+
+
+func _on_second_tick(_now: float) -> void:
+	if farm:
+		refresh_all_plants()
+
+
+## All object views (read-only use).
+func get_object_views() -> Array:
+	return _objects.values()
 
 
 # --- Coordinates ----------------------------------------------------------
@@ -183,7 +222,7 @@ func end_drag(commit: bool = true) -> bool:
 	var from_cell := obj.cell
 	var moved := false
 	if commit and _drag_valid and _drag_target_cell != from_cell:
-		moved = grid.move(obj.instance_key, _drag_target_cell)
+		moved = farm.move_object(obj.instance_key, _drag_target_cell)
 	if moved:
 		obj.cell = _drag_target_cell
 	obj.position = cell_to_local(obj.cell)

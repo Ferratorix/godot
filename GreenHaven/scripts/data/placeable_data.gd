@@ -23,6 +23,16 @@ enum Category { FURNITURE, DECOR, PRODUCTION, STORAGE, TRADE, EQUIPMENT }
 ## Can the player move this object with long-press + drag?
 @export var movable: bool = true
 
+@export_group("Growing")
+## Number of plant slots (0 = not a growing object).
+@export var grow_slots: int = 0
+## What kind of growing medium the slots provide (see PlantData.SlotType).
+@export var slot_type: int = 0
+## Per-slot point (relative to the footprint centre) where the plant's
+## soil line is drawn. Size must equal [member grow_slots].
+@export var slot_positions: PackedVector2Array = PackedVector2Array()
+
 
 func is_valid() -> bool:
-	return id != &"" and texture != null and footprint.x > 0 and footprint.y > 0
+	return id != &"" and texture != null and footprint.x > 0 and footprint.y > 0 \
+		and grow_slots >= 0 and (grow_slots == 0 or slot_positions.size() == grow_slots)

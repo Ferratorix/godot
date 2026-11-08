@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EquipmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/equipment_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/icons/equipment_led_basic.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"led_basic"
+name_key = "EQ_LED_NAME"
+description_key = "EQ_LED_DESC"
+category = 1
+cost = 200
+icon = ExtResource("2_icon")
+unlock_level = 2
+max_count = 1
+requires = &""
+replaces = &""
+growth_time_multiplier = 0.9
+yield_bonus = 0.0

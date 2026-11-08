@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PlaceableData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/placeable_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/objects/hydro_rack_advanced.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"hydro_rack_advanced"
+name_key = "OBJ_HYDRO_RACK_ADV_NAME"
+description_key = "OBJ_HYDRO_RACK_ADV_DESC"
+category = 2
+texture = ExtResource("2_tex")
+texture_anchor = Vector2(16, 52)
+footprint = Vector2i(1, 1)
+movable = true
+grow_slots = 6
+slot_type = 0
+slot_positions = PackedVector2Array(-5, -7, 5, -5, -5, -22, 5, -20, -5, -37, 5, -35)

@@ -8,6 +8,7 @@ var main: Node
 
 
 func before_each() -> void:
+	GameManager.new_game()
 	main = MAIN.instantiate()
 	tree.root.add_child(main)
 	await frames(3)
@@ -79,3 +80,90 @@ func test_back_closes_panel_before_quitting() -> void:
 	world.room.select_object(world.room.objects_root.get_child(0))
 	main.hud.handle_back()
 	check(world.room.selected == null, "back deselects instead of quitting")
+
+
+func _button(root_node: Node, text: String) -> Button:
+	for b in root_node.find_children("*", "Button", true, false):
+		if (b as Button).text == text and (b as Button).is_visible_in_tree():
+			return b
+	return null
+
+
+func _rack() -> WorldObject:
+	return _find(&"hydro_rack_basic")
+
+
+func test_plant_through_slot_button_and_seed_picker() -> void:
+	var world: FarmWorld = main.world
+	var hud: Hud = main.hud
+	world.room.select_object(_rack())
+	await frames(1)
+	var plant_btn := _button(hud.info_panel, tr("UI_PLANT"))
+	check(plant_btn != null, "slot shows Plant button")
+	plant_btn.pressed.emit()
+	check(hud.get_open_panel() == hud.seed_picker, "seed picker opened")
+	await frames(1)
+	var choose := _button(hud.seed_picker, tr("UI_PLANT"))
+	check(choose != null and not choose.disabled, "seed row button")
+	choose.pressed.emit()
+	check(hud.get_open_panel() == null, "picker closed after planting")
+	var farm := GameManager.farm
+	check(farm.get_plant(_rack().instance_key, 0) != null, "planted via UI")
+
+
+func test_tap_ripe_rack_harvests() -> void:
+	var farm := GameManager.farm
+	var key := _rack().instance_key
+	farm.plant(key, 0, &"microgreens")
+	farm.get_plant(key, 0).ready_at = TimeManager.now() - 1.0  # Ripe.
+	var got: Array = []
+	main.world.harvested.connect(func(_p: Vector2, r: Dictionary) -> void: got.append(r))
+	_tap(_world_to_screen(main.world.room.cell_to_world(_rack().cell)))
+	check_eq(got, [{&"microgreens": 2}])
+	check_eq(InventoryManager.get_count(&"microgreens"), 2)
+	check(farm.get_plant(key, 0) == null)
+
+
+func test_shop_buy_through_ui_updates_top_bar() -> void:
+	var hud: Hud = main.hud
+	hud.open_panel(hud.shop_panel)
+	await frames(1)
+	var buy := _button(hud.shop_panel, "×1")  # First row: microgreens.
+	buy.pressed.emit()
+	check_eq(EconomyManager.coins, 95)
+	check_eq(InventoryManager.get_count(&"seed_microgreens"), 5)
+	check_eq(hud.coins_label.text, "95")
+	hud.shop_panel.select_tab(ShopPanel.Tab.EQUIPMENT)
+	await frames(1)
+	var rack_buy := _button(hud.shop_panel, tr("UI_BUY"))
+	check(rack_buy == null or rack_buy.disabled == false, "buy button state is consistent")
+	check(_button(hud.shop_panel, tr("UI_LEVEL_SHORT_FMT") % 2) != null, "locked items show level")
+
+
+func test_storage_sell_everything() -> void:
+	var hud: Hud = main.hud
+	InventoryManager.add_item(&"lettuce", 3)
+	InventoryManager.add_item(&"microgreens", 2)
+	hud.open_panel(hud.storage_panel)
+	await frames(1)
+	_button(hud.storage_panel, tr("UI_SELL_EVERYTHING")).pressed.emit()
+	check_eq(EconomyManager.coins, 100 + 27 + 8)
+	check_eq(InventoryManager.get_count(&"lettuce"), 0)
+
+
+func test_back_closes_modal_first() -> void:
+	var hud: Hud = main.hud
+	main.world.room.select_object(_rack())
+	hud.open_panel(hud.skills_panel)
+	hud.handle_back()
+	check(hud.get_open_panel() == null, "modal closed")
+	check(main.world.room.selected != null, "selection kept")
+	hud.handle_back()
+	check(main.world.room.selected == null)
+
+
+func test_buying_rack_spawns_it_in_the_room() -> void:
+	EconomyManager.add_coins(200)
+	var before: int = main.world.room.objects_root.get_child_count()
+	check(GameManager.farm.purchase_equipment(&"hydro_rack_basic"))
+	check_eq(main.world.room.objects_root.get_child_count(), before + 1)

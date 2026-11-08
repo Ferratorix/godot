@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlaceableData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/placeable_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/placeholder/objects/auto_watering.png" id="2_tex"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"auto_watering"
+name_key = "OBJ_AUTO_WATERING_NAME"
+description_key = "OBJ_AUTO_WATERING_DESC"
+category = 5
+texture = ExtResource("2_tex")
+texture_anchor = Vector2(16, 28)
+footprint = Vector2i(1, 1)
+movable = true
