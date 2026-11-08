@@ -13,6 +13,24 @@ xvfb-run -a godot --path . -s res://tools/screenshot.gd -- out=/tmp/shot.png sel
 Свой мини-раннер (`tests/run_tests.gd` + `tests/test_case.gd`) — без сторонних зависимостей.
 Методы `test_*` в файлах `tests/test_*.gd` находятся автоматически.
 
+## CI на официальном Godot 4.5.1 stable — 2026-11-08 (PHASE 8)
+
+Workflow `.github/workflows/green_haven.yml`, первый запуск
+[#42499131067](https://github.com/Ferratorix/godot/actions/runs/42499131067):
+
+| Шаг | Результат |
+|---|---|
+| Импорт проекта в Godot 4.5.1.stable.official | ✅ |
+| Автотесты | ✅ (с этого коммита шаг дополнительно требует строку «N tests, N passed, 0 failed») |
+| Экспорт Android (arm64-v8a + armeabi-v7a), подпись debug-ключом, проверка APK (`apksigner verify`) | ✅ `GreenHaven-debug.apk`, 57 МБ |
+| Адаптивная иконка, разрешение VIBRATE в манифесте | ✅ (по логу экспорта) |
+| Release-экспорт | ⏭️ пропущен — секреты ключа не настроены |
+| Статические проверки репозитория (codespell, ruff, mypy, file-format, CODEOWNERS) | ✅ |
+
+Размер APK почти целиком — движок (2 архитектуры × `libgodot_android.so`); данные игры < 2 МБ.
+Можно уменьшить: собирать только arm64-v8a (≈ −20 МБ) или публиковать AAB (Play отдаёт
+устройству одну архитектуру).
+
 ## Результаты — 2026-11-08, v0.3.0 (PHASE 0–7)
 
 | Проверка | Результат |
